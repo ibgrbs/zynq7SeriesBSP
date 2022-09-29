@@ -53,6 +53,10 @@
 #define XUARTPS_CR_OFFSET 0x00000000
 #define XUARTPS_MR_OFFSET 0x00000004
 #define XUARTPS_IER_OFFSET 0x00000008
+#define XUARTPS_BRGR_OFFSET 0x00000018 // baud rate generator register offset
+#define XUARTPS_BRDR_OFFSET 0x00000034 // baud rate divider register offset
+#define XUARTPS_RXFIFO_TRIGGER_OFFSET 0x0000044 // RX fifo trigger register offset
+#define XUARTPS_RXTOUT_OFFSET 0x0000001C // RX timeout register offset
 
 //TODO do the rest
 /*Control register bits positions*/
@@ -64,14 +68,15 @@
 #define XUARTPS_CR_RX_DIS 3
 #define XUARTPS_CR_RX_EN 2
 #define XUARTPS_CR_TXRST 1
-
 #define XUARTPS_CR_RXRST 0
+
 /*Mode register bits*/
 #define MR_CHMOD 0b00 << 9
 #define MR_NBSTOP 0b00 << 7
 #define MR_PAR 0b100 << 5
 #define MR_CHRL 0b00 << 2
 #define MR_CLKSEL 0b0 << 0
+
 
 
 #define UARTPS_MR_DEFAULT (MR_CHMOD | MR_NBSTOP | \
@@ -100,7 +105,7 @@ static ReturnType uartRx (RUINT32 *RxBuffer, RUINT32 size);
  * 		this function writes value to addr.
  */
 static void uartRegWrite (RUINT32 addr, RUINT32 value){
-	RUINT32 *tempAddr = (RUINT32 *)addr; // typecast addr val to pointer
+	RUINT32 *tempAddr = (RUINT32 *)(addr + XUARTPS_INST0_ADDR) ; // typecast addr val to pointer
 	*tempAddr = value; // set data pointed by tempAddr to input value
 	return;
 }
@@ -141,7 +146,7 @@ static void uartClearRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
  * 		this function reads register value by the address addr.
  */
 static void uartRegRead (RUINT32 addr, RUINT32 *value){
-	RUINT32 *tempAddr = (RUINT32 *)addr; // typecast addr val to pointer
+	RUINT32 *tempAddr = (RUINT32 *)(addr + XUARTPS_INST0_ADDR); // typecast addr val to pointer
 	*value = *tempAddr; // read data and set to pointed by value
 	return;
 }
@@ -192,26 +197,6 @@ static void configuraUartCtrlReg(void)
 	uartRegWrite(ModeRegAddr, UARTPS_MR_DEFAULT);
 }
 
-static void configuraBaudRate(uartBaudRateType baudRate)
-{
-	// TODO : this sets to 115200, make it configurable
-
-	RUINT32 u4ReadCtrlReg;
-	RUINT32 u4TempValue;
-
-	// write to three registers : control reg, baud_ge_reg, baud_rate_divider_reg
-
-	//set control register - disable rx and tx paths
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
-	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_TX_EN);// set 0 to TX enable
-	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_RX_EN);// set 0 to RX enable
-	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_DIS) | ((RUINT32)0x01 << XUARTPS_CR_RX_DIS);
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue); // enable RX and TX disables
-
-
-
-}
-
 
 static ReturnType configureUart (uartCfgType cfgInstance){
 	/*
@@ -231,6 +216,13 @@ static ReturnType configureUart (uartCfgType cfgInstance){
 	 *
 	 */
 
+	// TODO : this sets to 115200, make it configurable
+
+	RUINT32 u4ReadCtrlReg;
+	RUINT32 u4TempValue;
+	RUINT32 CD_115200 = (RUINT32)62U;
+	RUINT32 BIDV_115200 = (RUINT32)6U;
+
 	// reset uart controller
 	uartReset();
 	// set IO routings - UART 0 - MIO46 RX - MIO47 T
@@ -243,9 +235,62 @@ static ReturnType configureUart (uartCfgType cfgInstance){
 	//control reg, baud rate reg and baud rate divider reg options for baud rate
 
 
+	// write to three registers : control reg, baud_ge_reg, baud_rate_divider_reg
 
+	//set control register - disable rx and tx paths
+	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
 
+	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_TX_EN);// set 0 to TX enable
+	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_RX_EN);// set 0 to RX enable
+	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_DIS) | ((RUINT32)0x01 << XUARTPS_CR_RX_DIS);
+	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue); // enable RX and TX disables
 
+	// write calculated CD value to baud rate generator register - CD bit field
+	uartRegWrite(XUARTPS_BRGR_OFFSET, CD_115200);
+	// write BIDV value to baud rate divider register
+	uartRegWrite(XUARTPS_BRDR_OFFSET, BIDV_115200);
+
+	// Reset TX and RX paths
+	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
+	u4TempValue = (RUINT32)u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TXRST) | ((RUINT32)0x01 << XUARTPS_CR_RXRST);
+	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue); // reset TX and RX paths
+
+	//enable TX and RX paths
+	uartSetRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_TX_EN);// set 1 to TX enable
+	uartSetRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_RX_EN);// set 1 to RX enable
+	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_TX_EN);// set 0 to TX disable
+	uartClearRegBit(XUARTPS_CR_OFFSET, XUARTPS_CR_RX_EN);// set 0 to RX disable
+
+	// set RxFIFO levels - disable
+	uartRegWrite(XUARTPS_RXFIFO_TRIGGER_OFFSET, (RUINT32)0x00);
+
+	//Enable Controller - Write 0x00000117 to control registers - this value comming from datasheet. TODO : make it configurable
+	uartRegWrite(XUARTPS_CR_OFFSET, 0x00000117); // controller enabled
+
+	// disable program receive timeout mechanism - write 0 to RSTTO bit field
+	uartRegWrite(XUARTPS_RXTOUT_OFFSET, 0x00); // receiver timeout disabled
+
+	//READY TO COMMUNICATE !!!
+	// SO FAR THIS IS DIRECT SOAPING. EVERYTHING IS DIRECTLY SET. TODO : MAKE IT CONFUGIRABLE
+
+}
+
+static ReturnType isTxFifoEmpty(void)
+{
+	RUINT32 u4ReadTxFifo;
+
+}
+
+/*
+ * pu1Data : pointer that holds data that will be transmitted
+ * u4size	 : size of bytes that will be transmitted
+ */
+static ReturnType TXData (RUINT8 *pu1Data, RUINT32 u4Size)
+{
+	/*procedure :
+	 * wait for tx fifo to be empty (only than new byte can be send)
+	 * fill the tx fifo with data
+	 * write new data if tx fifo is empty until number of transmissions is done */
 }
 
 

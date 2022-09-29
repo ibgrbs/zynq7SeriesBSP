@@ -1,4 +1,4 @@
-20:16:49 **** Auto Build of configuration Debug for project Uart_Driver ****
+20:48:15 **** Auto Build of configuration Debug for project Uart_Driver ****
 make pre-build main-build 
 a9-linaro-pre-build-step
 ' '
@@ -6,33 +6,44 @@ a9-linaro-pre-build-step
 'Invoking: ARM v7 gcc compiler'
 arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/UartDriver/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/UartDriver/Uart.d" -MT"src/UartDriver/Uart.o" -o "src/UartDriver/Uart.o" "../src/UartDriver/Uart.c"
 ../src/UartDriver/Uart.c: In function 'configureUart':
-../src/UartDriver/Uart.c:249:1: warning: no return statement in function returning non-void [-Wreturn-type]
+../src/UartDriver/Uart.c:276:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/UartDriver/Uart.c: In function 'isTxFifoEmpty':
+../src/UartDriver/Uart.c:280:10: warning: unused variable 'u4ReadTxFifo' [-Wunused-variable]
+  RUINT32 u4ReadTxFifo;
+          ^~~~~~~~~~~~
+../src/UartDriver/Uart.c:282:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/UartDriver/Uart.c: In function 'TXData':
+../src/UartDriver/Uart.c:294:1: warning: no return statement in function returning non-void [-Wreturn-type]
  }
  ^
 ../src/UartDriver/Uart.c: At top level:
-../src/UartDriver/Uart.c:90:19: warning: 'ConfigureUart' declared 'static' but never defined [-Wunused-function]
+../src/UartDriver/Uart.c:95:19: warning: 'ConfigureUart' declared 'static' but never defined [-Wunused-function]
  static ReturnType ConfigureUart (uartCfgType cfgInstance);
                    ^~~~~~~~~~~~~
-../src/UartDriver/Uart.c:91:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+../src/UartDriver/Uart.c:96:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
  static ReturnType uartTx (RUINT32 *TxBuffer, RUINT32 size);
                    ^~~~~~
-../src/UartDriver/Uart.c:92:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+../src/UartDriver/Uart.c:97:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
  static ReturnType uartRx (RUINT32 *RxBuffer, RUINT32 size);
                    ^~~~~~
 ../src/UartDriver/Uart.c: In function 'initializeUartCfg':
-../src/UartDriver/Uart.c:165:1: warning: control reaches end of non-void function [-Wreturn-type]
+../src/UartDriver/Uart.c:170:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 At top level:
-../src/UartDriver/Uart.c:216:19: warning: 'configureUart' defined but not used [-Wunused-function]
+../src/UartDriver/Uart.c:288:19: warning: 'TXData' defined but not used [-Wunused-function]
+ static ReturnType TXData (RUINT8 *pu1Data, RUINT32 u4Size)
+                   ^~~~~~
+../src/UartDriver/Uart.c:278:19: warning: 'isTxFifoEmpty' defined but not used [-Wunused-function]
+ static ReturnType isTxFifoEmpty(void)
+                   ^~~~~~~~~~~~~
+../src/UartDriver/Uart.c:201:19: warning: 'configureUart' defined but not used [-Wunused-function]
  static ReturnType configureUart (uartCfgType cfgInstance){
                    ^~~~~~~~~~~~~
-../src/UartDriver/Uart.c:195:13: warning: 'configuraBaudRate' defined but not used [-Wunused-function]
- static void configuraBaudRate(uartBaudRateType baudRate)
-             ^~~~~~~~~~~~~~~~~
-../src/UartDriver/Uart.c:111:13: warning: 'uartSetRegBit' defined but not used [-Wunused-function]
- static void uartSetRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
-             ^~~~~~~~~~~~~
 'Finished building: ../src/UartDriver/Uart.c'
 ' '
 'Building target: Uart_Driver.elf'
@@ -43,9 +54,9 @@ arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=non
 'Invoking: ARM v7 Print Size'
 arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
    text	   data	    bss	    dec	    hex	filename
-  19832	   1144	  22584	  43560	   aa28	Uart_Driver.elf
+  20044	   1144	  22584	  43772	   aafc	Uart_Driver.elf
 'Finished building: Uart_Driver.elf.size'
 ' '
 
-20:16:49 Build Finished (took 469ms)
+20:48:16 Build Finished (took 479ms)
 
