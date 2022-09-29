@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Uart_Driver/src/CommonTypes&apos; to &apos;CommonTypes.h&apos;" description="Rename resource &apos;CommonTypes&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/CommonTypes" name="CommonTypes.h" stamp="1661798223675" updateReferences="true"/>
+</session>

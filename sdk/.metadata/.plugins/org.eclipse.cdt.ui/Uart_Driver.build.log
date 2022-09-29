@@ -1,0 +1,47 @@
+22:46:50 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/UartDriver/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/UartDriver/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/UartDriver/Uart.d" -MT"src/UartDriver/Uart.o" -o "src/UartDriver/Uart.o" "../src/UartDriver/Uart.c"
+../src/UartDriver/Uart.c: In function 'InitializeUartCfg':
+../src/UartDriver/Uart.c:132:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/UartDriver/Uart.c: In function 'ConfigureUart':
+../src/UartDriver/Uart.c:177:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/UartDriver/Uart.c: At top level:
+../src/UartDriver/Uart.c:85:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx (UINT32 *TxBuffer, UINT32 size);
+                   ^~~~~~
+../src/UartDriver/Uart.c:86:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx (UINT32 *RxBuffer, UINT32 size);
+                   ^~~~~~
+../src/UartDriver/Uart.c:135:19: warning: 'ConfigureUart' defined but not used [-Wunused-function]
+ static ReturnType ConfigureUart (uartCfgType cfgInstance){
+                   ^~~~~~~~~~~~~
+../src/UartDriver/Uart.c:127:19: warning: 'InitializeUartCfg' defined but not used [-Wunused-function]
+ static ReturnType InitializeUartCfg (uartCfgType *cfgInstance){
+                   ^~~~~~~~~~~~~~~~~
+../src/UartDriver/Uart.c:109:13: warning: 'uartRegRead' defined but not used [-Wunused-function]
+ static void uartRegRead (UINT32 addr, UINT32 *value){
+             ^~~~~~~~~~~
+'Finished building: ../src/UartDriver/Uart.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/UartDriver/Uart.o  ./src/helloworld.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  19448	   1144	  22584	  43176	   a8a8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+
+22:46:52 Build Finished (took 1s.995ms)
+

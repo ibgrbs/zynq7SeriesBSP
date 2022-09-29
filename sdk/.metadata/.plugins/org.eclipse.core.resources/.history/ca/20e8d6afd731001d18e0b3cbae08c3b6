@@ -1,0 +1,112 @@
+/*
+ * Uart.c
+ *
+ *  Created on: Aug 28, 2022
+ *      Author: bugra's PC
+ */
+
+
+/*
+ * This is Uart driver that would initialize PS uart controller
+ * Document Structure :
+ * Basic setter - getter functions
+ * Basic register write / read operations
+ * Hardware related register map : Map includes:
+ * 	Base addresses of registers
+ * 	Offsets of register to address
+ * 	Default values of register
+ * 	BitMasks to read or write spesific bits in various registers
+ * Driver usage manual
+ * Driver related type definitions and Structures
+ * Initialization, Configurations and basic use case
+ * internal Built in tests (BIT) such as loopback tests etc.
+ * TODO-1 : This is currently compatible with PS uart blocks (Uart0 and Uart1),
+ * Update source code to be compatible with UartLite (PL - Uart - MIO/EMIO)
+ * TODO-2 : Update source code the be compatible with User Defined - Uart blocks so that it can be used with any
+ * PL Design
+ */
+
+/**************Includes******************/
+/*TODO : currently file inclusions are according to folder positions
+ * project is being compiled with sdk provided makefile which causes folder locations being
+ * crucial. Create a makefile document which would compile and include folder locations
+ * so that location of folder when included is not important. Compile project from
+ * user makefile.
+ */
+#include <stdio.h>
+#include "../platform.h"
+#include "Uart.h"
+#include "../CommonTypes.h"
+/**************Preprocessor******************/
+/*UART Controller base addresses*/
+#define XUARTPS_INST0_ADDR 0xE0000000
+#define XUARTPS_INST1_ADDR 0xE0001000
+/*Register Address definitions*/
+#define XUARTPS_CR_OFFSET 0x00000000
+#define XUARTPS_MR_OFFSET 0x00000004
+#define XUARTPS_IER_OFFSET 0x00000008
+//TODO do the rest
+/*Control register bits positions*/
+#define XUARTPS_CR_STOPBRK 8
+#define XUARTPS_CR_STARTBRK 7
+#define XUARTPS_CR_TORST 6
+#define XUARTPS_CR_TX_DIS 5
+#define XUARTPS_CR_TX_EN 4
+#define XUARTPS_CR_RX_DIS 3
+#define XUARTPS_CR_RX_EN 2
+#define XUARTPS_CR_TXRST 1
+#define XUARTPS_CR_RXRST 0
+
+/**************Definitions******************/
+static uartCfgType *sCfgInstance = NULL; // to be set by ConfigureUart Function
+
+
+/**************Function Prototypes******************/
+static void uartRegWrite (UINT32 addr, UINT32 value);
+static void uartRegRead  (UINT32 addr, UINT32 *value);
+static ReturnType InitializeUartCfg (uartCfgType *cfgInstance);
+//what this control register does is that - set bits of this register and then write this data to spesific register - instance config
+static ReturnType ConfigureUart (uartCfgType cfgInstance, UINT32 ControlRegister);
+static ReturnType uartTx (UINT32 *TxBuffer, UINT32 size);
+static ReturnType uartRx (UINT32 *RxBuffer, UINT32 size);
+/**************Function Prototypes******************/
+
+/*
+ * @param :
+ * @ addr : address of the register that the value will be written
+ * @ value : value that will be written
+ * @ description :
+ * 		this function writes value to addr.
+ */
+static void uartRegWrite (UINT32 addr, UINT32 value){
+	UINT32 *tempAddr = (UINT32 *)addr; // typecast addr val to pointer
+	*tempAddr = value; // set data pointed by tempAddr to input value
+	return;
+}
+
+/*
+ * @param :
+ * 	@addr : address of the register that the will be read
+ * 	@value : variable that data will be read to
+ * @description :
+ * 		this function reads register value by the address addr.
+ */
+static void uartRegRead (UINT32 addr, UINT32 *value){
+	UINT32 *tempAddr = (UINT32 *)addr; // typecast addr val to pointer
+	*value = *tempAddr; // read data and set to pointed by value
+	return;
+}
+
+/*
+ * @param :
+ * 	@cfgInstance : input instance that will be used to configure uart controller
+ * @ description : cfg has controller register value, baudrate and parity information to configure uart controller
+ *
+ */
+static ReturnType InitializeUartCfg (uartCfgType *cfgInstance){
+
+
+}
+
+
+

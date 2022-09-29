@@ -1,0 +1,152 @@
+21:24:13 INFO  : Registering command handlers for SDK TCF services
+21:24:14 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+21:24:16 INFO  : XSCT server has started successfully.
+21:24:18 INFO  : Successfully done setting XSCT server connection channel  
+21:24:18 INFO  : Successfully done setting SDK workspace  
+21:25:04 INFO  : Registering command handlers for SDK TCF services
+21:25:05 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+21:25:07 INFO  : XSCT server has started successfully.
+21:25:07 INFO  : Successfully done setting XSCT server connection channel  
+21:25:07 INFO  : Successfully done setting SDK workspace  
+21:27:51 INFO  : Example project hello_world_bsp_xiicps_intr_master_example_1 has been created successfully.
+21:27:51 INFO  : Example project hello_world_bsp_xiicps_polled_master_example_1 has been created successfully.
+21:16:45 INFO  : Registering command handlers for SDK TCF services
+21:16:46 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+21:16:48 INFO  : XSCT server has started successfully.
+21:16:48 INFO  : Successfully done setting XSCT server connection channel  
+21:16:49 INFO  : Successfully done setting SDK workspace  
+14:35:11 INFO  : Registering command handlers for SDK TCF services
+14:35:12 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+14:35:14 INFO  : XSCT server has started successfully.
+14:35:14 INFO  : Successfully done setting XSCT server connection channel  
+14:35:14 INFO  : Successfully done setting SDK workspace  
+15:16:21 INFO  : Project 'ZyboBase' created. You can now create BSPs and application projects targeting this hardware platform.
+15:17:20 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+15:17:38 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+----------------End of Script----------------
+
+15:23:34 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+15:23:34 INFO  : Jtag cable 'Digilent Zybo Z7 210351B3FB7BA' is selected.
+15:23:34 INFO  : 'jtag frequency' command is executed.
+15:23:34 INFO  : Sourcing of 'C:/Workspace/sdk/ZyboBase/ps7_init.tcl' is done.
+15:23:34 INFO  : Context for 'APU' is selected.
+15:23:34 INFO  : System reset is completed.
+15:23:37 INFO  : 'after 3000' command is executed.
+15:23:37 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA" && level==0} -index 1' command is executed.
+15:23:38 INFO  : FPGA configured successfully with bitstream "C:/Workspace/sdk/ZyboBase/BaseDesign_wrapper.bit"
+15:23:38 INFO  : Context for 'APU' is selected.
+15:23:38 INFO  : Hardware design information is loaded from 'C:/Workspace/sdk/ZyboBase/system.hdf'.
+15:23:38 INFO  : 'configparams force-mem-access 1' command is executed.
+15:23:38 INFO  : Context for 'APU' is selected.
+15:23:38 INFO  : 'ps7_init' command is executed.
+15:23:38 INFO  : 'ps7_post_config' command is executed.
+15:23:39 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+15:23:39 INFO  : The application 'C:/Workspace/sdk/BaseProject/Debug/BaseProject.elf' is downloaded to processor 'ps7_cortexa9_0'.
+15:23:39 INFO  : 'configparams force-mem-access 0' command is executed.
+15:23:39 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Workspace/sdk/ZyboBase/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA" && level==0} -index 1
+fpga -file C:/Workspace/sdk/ZyboBase/BaseDesign_wrapper.bit
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+loadhw -hw C:/Workspace/sdk/ZyboBase/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+dow C:/Workspace/sdk/BaseProject/Debug/BaseProject.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+15:23:39 INFO  : Memory regions updated for context APU
+15:23:39 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+15:23:39 INFO  : 'con' command is executed.
+15:23:39 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+con
+----------------End of Script----------------
+
+15:23:39 INFO  : Launch script is exported to file 'C:\Workspace\sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\debugtarget.tcl'
+17:12:42 INFO  : Disconnected from the channel tcfchan#1.
+21:07:27 INFO  : Registering command handlers for SDK TCF services
+21:07:28 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+21:07:30 INFO  : XSCT server has started successfully.
+21:07:33 INFO  : Successfully done setting XSCT server connection channel  
+21:07:33 INFO  : Successfully done setting SDK workspace  
+16:22:11 INFO  : Registering command handlers for SDK TCF services
+16:22:12 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+16:22:15 INFO  : XSCT server has started successfully.
+16:22:17 INFO  : Successfully done setting XSCT server connection channel  
+16:22:17 INFO  : Successfully done setting SDK workspace  
+16:26:16 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:26:17 INFO  : Jtag cable 'Digilent Zybo Z7 210351B3FB7BA' is selected.
+16:26:17 INFO  : 'jtag frequency' command is executed.
+16:26:17 INFO  : Sourcing of 'C:/Workspace/sdk/ZyboBase/ps7_init.tcl' is done.
+16:26:18 INFO  : Context for 'APU' is selected.
+16:26:18 INFO  : System reset is completed.
+16:26:21 INFO  : 'after 3000' command is executed.
+16:26:21 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA" && level==0} -index 1' command is executed.
+16:26:22 INFO  : FPGA configured successfully with bitstream "C:/Workspace/sdk/ZyboBase/BaseDesign_wrapper.bit"
+16:26:22 INFO  : Context for 'APU' is selected.
+16:26:22 INFO  : Hardware design information is loaded from 'C:/Workspace/sdk/ZyboBase/system.hdf'.
+16:26:22 INFO  : 'configparams force-mem-access 1' command is executed.
+16:26:23 INFO  : Context for 'APU' is selected.
+16:26:23 INFO  : 'ps7_init' command is executed.
+16:26:23 INFO  : 'ps7_post_config' command is executed.
+16:26:23 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:26:23 INFO  : The application 'C:/Workspace/sdk/BaseProject/Debug/BaseProject.elf' is downloaded to processor 'ps7_cortexa9_0'.
+16:26:23 INFO  : 'configparams force-mem-access 0' command is executed.
+16:26:23 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Workspace/sdk/ZyboBase/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA" && level==0} -index 1
+fpga -file C:/Workspace/sdk/ZyboBase/BaseDesign_wrapper.bit
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+loadhw -hw C:/Workspace/sdk/ZyboBase/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+dow C:/Workspace/sdk/BaseProject/Debug/BaseProject.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+16:26:24 INFO  : Memory regions updated for context APU
+16:26:24 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:26:24 INFO  : 'con' command is executed.
+16:26:24 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zybo Z7 210351B3FB7BA"} -index 0
+con
+----------------End of Script----------------
+
+16:26:24 INFO  : Launch script is exported to file 'C:\Workspace\sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\debugtarget.tcl'
+16:27:23 INFO  : Disconnected from the channel tcfchan#1.
+16:33:30 INFO  : Registering command handlers for SDK TCF services
+16:33:31 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+16:33:34 INFO  : XSCT server has started successfully.
+16:33:34 INFO  : Successfully done setting XSCT server connection channel  
+16:33:37 INFO  : Successfully done setting SDK workspace  
+21:38:48 INFO  : Registering command handlers for SDK TCF services
+21:38:49 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+21:38:51 INFO  : XSCT server has started successfully.
+21:38:51 INFO  : Successfully done setting XSCT server connection channel  
+21:38:53 INFO  : Successfully done setting SDK workspace  
+16:11:17 INFO  : Registering command handlers for SDK TCF services
+16:11:18 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+16:11:20 INFO  : XSCT server has started successfully.
+16:11:22 INFO  : Successfully done setting XSCT server connection channel  
+16:11:22 INFO  : Successfully done setting SDK workspace  
+01:23:02 INFO  : Registering command handlers for SDK TCF services
+01:23:03 INFO  : Launching XSCT server: xsct.bat -interactive C:\Workspace\sdk\temp_xsdb_launch_script.tcl
+01:23:06 INFO  : XSCT server has started successfully.
+01:23:08 INFO  : Successfully done setting XSCT server connection channel  
+01:23:08 INFO  : Successfully done setting SDK workspace  
