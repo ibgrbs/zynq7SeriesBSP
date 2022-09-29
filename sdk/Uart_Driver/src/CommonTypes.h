@@ -8,16 +8,16 @@
 #ifndef SRC_COMMONTYPES_H_
 #define SRC_COMMONTYPES_H_
 
-typedef char CHAR;
-typedef unsigned char UINT8;
-typedef  char INT8;
-typedef unsigned short UINT16;
-typedef signed short INT16;
-typedef unsigned int UINT32;
-typedef signed int INT32;
-typedef unsigned long UINT64;
-typedef float Float;
-typedef double Double;
+typedef char RCHAR;
+typedef unsigned char RUINT8;
+typedef  char RINT8;
+typedef unsigned short RUINT16;
+typedef signed short RINT16;
+typedef unsigned int RUINT32;
+typedef signed int RINT32;
+typedef unsigned long RUINT64;
+typedef float RFloat;
+typedef double RDouble;
 
 typedef enum {
 	XST_SUCCESS = 0,

@@ -25,19 +25,19 @@ typedef enum {
 } uartBaudRateType;
 
 typedef struct {
-	UINT32 u4ControlRegister;
+	RUINT32 u4ControlRegister;
 	uartBaudRateType BaudRate;
 	uartParityType Parity;
 } uartCfgType;
 
 typedef struct {
-	INT32 *TxDataFifo;
-	UINT32 *RxDataFifo;
+	RINT32 *TxDataFifo;
+	RUINT32 *RxDataFifo;
 } FIFOType;
 
 typedef struct {
-	INT8 Start;
-	INT8 Size;
+	RINT8 Start;
+	RINT8 Size;
 } BITType;
 /**************Prototypes******************/
 //static void configureUartregister(const uartConfigureType *cpConfig);
