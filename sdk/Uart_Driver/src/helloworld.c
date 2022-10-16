@@ -47,6 +47,8 @@
 
 #include <stdio.h>
 #include "platform.h"
+#include "Uart.h"
+#include "xil_io.h"
 #include "xil_printf.h"
 
 
@@ -56,6 +58,12 @@ int main()
 
     print("Hello World\n\r");
 
+    uartCfgType cfgInstance0;
+    configureUart(cfgInstance0);
+
+    print("Hello World from my driver\n\r");
+
     cleanup_platform();
+
     return 0;
 }
