@@ -870,3 +870,24 @@ java.io.FileNotFoundException: D:\GITHUB\zynqBSP\zynq7SeriesBSP\sdk\.metadata\.p
 	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1165)
 	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:52)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:01.213
+!MESSAGE XSCT Command: [ ::hsi::utils::set_current_hw_sw D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/ZyboBase/system.hdf D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss ], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:02.463
+!MESSAGE XSCT command with result: [ ::hsi::utils::set_current_hw_sw D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/ZyboBase/system.hdf D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss ], Result: [null, ]. Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:02.463
+!MESSAGE XSCT Command: [::hsi::utils::get_hw_sw_details -json D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/ZyboBase/system.hdf D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:02.463
+!MESSAGE XSCT command with result: [::hsi::utils::get_hw_sw_details -json D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/ZyboBase/system.hdf D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss], Result: [null, {"procname": "ps7_cortexa9_0",
+"osname": "standalone",
+"osver": "7.0",
+}]. Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:02.463
+!MESSAGE XSCT Command: [::hsi::utils::closesw D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2022-10-16 19:05:02.463
+!MESSAGE XSCT command with result: [::hsi::utils::closesw D:/GITHUB/zynqBSP/zynq7SeriesBSP/sdk/BaseProject_bsp/system.mss], Result: [null, ]. Thread: main
