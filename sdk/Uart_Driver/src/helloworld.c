@@ -59,9 +59,26 @@ int main()
     print("Hello World\n\r");
 
     uartCfgType cfgInstance0;
-    configureUart(cfgInstance0);
+    uartCfgType cfgInstance1;
 
-    print("Hello World from my driver\n\r");
+
+    cfgInstance0.DeviceNum = UART_INSTANCE_DEVICE_1;
+    cfgInstance1.DeviceNum = UART_INSTANCE_DEVICE_0;
+
+    initializeUartCfg (&cfgInstance0);
+    InitializeUart(&cfgInstance0);
+
+    RUINT8 trialArray[] = "hello from my driver \r\n";
+    RUINT8 trialArray2[1000];
+
+    UartSendData(trialArray, &cfgInstance0, sizeof(trialArray));
+    RUINT32 counter = 0;
+    while(counter < 20){
+
+    	UartReceiveData(trialArray2, &cfgInstance0, 1);
+    	UartSendData(trialArray2, &cfgInstance0, counter);
+    	counter++;
+    }
 
     cleanup_platform();
 

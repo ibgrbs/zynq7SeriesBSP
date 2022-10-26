@@ -42,12 +42,15 @@
 /*System level control registers - SLCR base address*/
 #define SLCR_BASE_ADDR 0xF8000000
 #define UART_RST_CTRL_OFFSET 0x00000228
+#define MIO_PIN_46_OFFSET 0x000007B4
+#define MIO_PIN_47_OFFSET 0x000007B8
 #define MIO_PIN_48_OFFSET 0x000007C0
 #define MIO_PIN_49_OFFSET 0x000007C4
 #define UART_CLK_CONTROL_OFFSET 0x00000154
 
 /*UART Controller base addresses*/
-#define XUARTPS_INST_ADDR 0xE0001000 // currently designed for uart 1 - soaped
+#define XUARTPS_BASE_ADDR 0xE0000000 // UART devices base addresses without device specification
+#define UARTPS_DEVICE_ADDR_CONST 0x1000 // uart device address specification address
 
 /*Register Address definitions*/
 #define XUARTPS_CR_OFFSET 0x00000000
@@ -91,29 +94,28 @@
 #define XUARTPS_SR_RXFULL 2 // indicate RX full bit !!!
 #define XUARTPS_SR_RXEMPTY 1 // indicate RX empty bit !!!
 #define XUARTPS_SR_RXOVR 0 // indicate RX FIFO trigger
-
-
 /********************************************************************************/
 
 #define UARTPS_MR_DEFAULT (MR_CHMOD | MR_NBSTOP | \
 						   MR_PAR | MR_CHRL | MR_CLKSEL)
-
 /**************Definitions******************/
-static uartCfgType *sCfgInstance = NULL; // to be set by ConfigureUart Function
-
+static uartCfgType sCfgInstance_Device0; // to be set by ConfigureUart Function
+static uartCfgType sCfgInstance_Device1; // to be set by ConfigureUart Function
 
 /**************Function Prototypes******************/
-static void uartRegWrite (RUINT32 addr, RUINT32 value);
-static void uartRegRead  (RUINT32 addr, RUINT32 *value);
-static void uartReset (void);
-static void regWrite (RUINT32 addr, RUINT32 value);
+static void uartRegWrite(RUINT32 addr, RUINT32 value, uartCfgType *Instance);
+static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance);
+static void uartReset(uartCfgType *Instance);
+static void regWrite(RUINT32 addr, RUINT32 value);
 static void regRead(RUINT32 addr, RUINT32 *value);
-ReturnType InitializeUartCfg (uartCfgType *cfgInstance);
-static ReturnType TxDataPolling (RUINT8 *pu1Data, RUINT32 u4Size);
+ReturnType InitializeUartCfg(uartCfgType *cfgInstance);
+static ReturnType TxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance);
+static ReturnType RxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance);
+static ReturnType isTxFifoEmpty(uartCfgType *pCfgInstance);
+static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
 //what this control register does is that - set bits of this register and then write this data to spesific register - instance config
-
-static ReturnType uartTx (RUINT32 *TxBuffer, RUINT32 size);
-static ReturnType uartRx (RUINT32 *RxBuffer, RUINT32 size);
+static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
 /**************Function Prototypes******************/
 
 /*
@@ -123,7 +125,8 @@ static ReturnType uartRx (RUINT32 *RxBuffer, RUINT32 size);
  * @ description :
  * 		this function writes value to addr.
  */
-static void regWrite (RUINT32 addr, RUINT32 value){
+static void regWrite (RUINT32 addr, RUINT32 value)
+{
 	RUINT32 *tempAddr = (RUINT32 *)(addr) ; // typecast addr val to pointer
 	*tempAddr = value; // set data pointed by tempAddr to input value
 	return;
@@ -137,7 +140,8 @@ static void regWrite (RUINT32 addr, RUINT32 value){
  * @description :
  * 		this function reads register value by the address addr.
  */
-static void regRead(RUINT32 addr, RUINT32 *value){
+static void regRead(RUINT32 addr, RUINT32 *value)
+{
 	RUINT32 *tempAddr = (RUINT32 *)(addr); // typecast addr val to pointer
 	*value = *tempAddr; // read data and set to pointed by value
 	return;
@@ -150,19 +154,35 @@ static void regRead(RUINT32 addr, RUINT32 *value){
  * @ description :
  * 		this function writes value to addr.
  */
-static void uartRegWrite (RUINT32 addr, RUINT32 value){
-	volatile RUINT32 *tempAddr = (volatile RUINT32 *)(addr + XUARTPS_INST_ADDR); // typecast addr val to pointer
+static void uartRegWrite (RUINT32 addr, RUINT32 value, uartCfgType *Instance)
+{
+
+	// typecast addr val to pointer
+	volatile RUINT32 *tempAddr = (volatile RUINT32 *)(addr + XUARTPS_BASE_ADDR + (UARTPS_DEVICE_ADDR_CONST * Instance->DeviceNum));
 	*tempAddr = value; // set data pointed by tempAddr to input value
 	return;
 }
 
+/*
+ * @param :
+ * 	@addr : address of the register that the will be read from
+ * 	@value : variable that data will be read and written to
+ * @description :
+ * 		this function reads register value by the address addr.
+ */
+static void uartRegRead (RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+{
+	RUINT32 *tempAddr = (RUINT32 *)(addr + XUARTPS_BASE_ADDR + (UARTPS_DEVICE_ADDR_CONST * Instance->DeviceNum)); // typecast addr val to pointer
+	*value = *tempAddr; // read data and set to pointed by value
+	return;
+}
 
 /*
  * sets specific bit position to logic true (1)
  */
-static void uartSetRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
+static void uartSetRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos, uartCfgType *Instance)
 {
-	RUINT32 *pu4TempReg = (RUINT32 *)(u4RegAddr + XUARTPS_INST_ADDR);
+	RUINT32 *pu4TempReg = (RUINT32 *)(u4RegAddr + XUARTPS_BASE_ADDR + (UARTPS_DEVICE_ADDR_CONST * Instance->DeviceNum));
 	RUINT32 u4TempValue = ((RUINT32)0x01U << u1BitPos);
 	if(u1BitPos < 32)
 	{
@@ -174,9 +194,9 @@ static void uartSetRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
 /*
  * sets specific bit position to logic false (0)
  */
-static void uartClearRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
+static void uartClearRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos, uartCfgType *Instance)
 {
-	RUINT32 *pu4TempReg = (RUINT32 *)(u4RegAddr + XUARTPS_INST_ADDR);
+	RUINT32 *pu4TempReg = (RUINT32 *)(u4RegAddr + XUARTPS_BASE_ADDR + (UARTPS_DEVICE_ADDR_CONST * Instance->DeviceNum));
 	RUINT32 u4TempValue = ((RUINT32)0x1 << u1BitPos);
 	u4TempValue = ~u4TempValue;
 	if(u1BitPos < 32)
@@ -186,27 +206,26 @@ static void uartClearRegBit (RUINT32 u4RegAddr, RUINT8 u1BitPos)
 	}
 }
 
-/*
- * @param :
- * 	@addr : address of the register that the will be read
- * 	@value : variable that data will be read to
- * @description :
- * 		this function reads register value by the address addr.
- */
-static void uartRegRead (RUINT32 addr, RUINT32 *value){
-	RUINT32 *tempAddr = (RUINT32 *)(addr + XUARTPS_INST_ADDR); // typecast addr val to pointer
-	*value = *tempAddr; // read data and set to pointed by value
-	return;
-}
+static void uartReset (uartCfgType *Instance)
+{
 
-static void uartReset (void){
-	RUINT32 UART_0_reset_addr = SLCR_BASE_ADDR + UART_RST_CTRL_OFFSET;
-	RUINT32 UART_0_reset_val = 0x07; // 1000 -> uart 1 reference software reset value (bit pos 3)
+	RUINT32 UART_reset_addr = SLCR_BASE_ADDR + UART_RST_CTRL_OFFSET;
+	RUINT32 UART_reset_val = 1U;
+	RUINT32 UART_base_shifter = 2;
+	RUINT32 u4TempValue = 0;
+	RUINT32 u4Mask = 0x01;
+	UART_reset_val = UART_reset_val << (UART_base_shifter + Instance->DeviceNum);
 
-	regWrite(UART_0_reset_addr, UART_0_reset_val); // assert reset
+	regWrite(UART_reset_addr, UART_reset_val); // assert reset
 	usleep(10000); // wait for 10ms
-	regWrite(UART_0_reset_addr, 0x00); // deassert reset to disable write protection
+	regRead(UART_reset_addr, &u4TempValue);
+	u4Mask = u4Mask << (UART_base_shifter + Instance->DeviceNum);
+	u4Mask = ~u4Mask;
+	u4TempValue &= u4Mask;
+	regWrite(UART_reset_addr, u4TempValue); // deassert reset to disable write protection
+	// safe version regWrite(UART_reset_addr, 0x00);
 }
+
 /*
  * @param :
  * 	@cfgInstance : input instance that will be used to configure uart controller
@@ -214,42 +233,128 @@ static void uartReset (void){
  * currently this is soaped - works only for uart instance 0
  * TODO : after uart0 operations are verified to be working correctly - update : uart 0 and 1 can be configured at any time
  */
-ReturnType initializeUartCfg (uartCfgType *cfgInstance){
-	sCfgInstance = cfgInstance;
+
+ReturnType initializeUartCfg (uartCfgType *cfgInstance)
+{
+	ReturnType retVal = XST_FAILURE;
+	if(cfgInstance->DeviceNum == UART_INSTANCE_DEVICE_0)
+	{
+		sCfgInstance_Device0 = *cfgInstance;
+		retVal = XST_SUCCESS;
+	}
+	else if(cfgInstance->DeviceNum == UART_INSTANCE_DEVICE_1)
+	{
+		sCfgInstance_Device1 = *cfgInstance;
+		retVal = XST_SUCCESS;
+	}
+
+	return retVal;
 	/* input config is connected to static driver config so that changing from outside of driver will affect statically*/
 }
 
-static void setIORouting(void)
+static void setIORouting(uartCfgType *cfgInstance)
 {
-	RUINT32 MIO49Addr = SLCR_BASE_ADDR + MIO_PIN_48_OFFSET;
-	RUINT32 MIO48Addr = SLCR_BASE_ADDR + MIO_PIN_49_OFFSET;
+	RUINT32 MIOTxAddr;
+	RUINT32 MIORxAddr;
 	RUINT32 rxMIOsetDefault = 0x000012E1U;
 	RUINT32 txMIOsetDefault = 0x000012E0U;
 
-	regWrite(MIO48Addr, rxMIOsetDefault);
-	regWrite(MIO49Addr, txMIOsetDefault);
+	if((cfgInstance != NULL) && (cfgInstance->DeviceNum == UART_INSTANCE_DEVICE_1))
+	{
+		MIOTxAddr = SLCR_BASE_ADDR + MIO_PIN_48_OFFSET;
+		MIORxAddr = SLCR_BASE_ADDR + MIO_PIN_49_OFFSET;
+	}
+	else if((cfgInstance != NULL) && (cfgInstance->DeviceNum == UART_INSTANCE_DEVICE_0))
+	{
+		MIOTxAddr = SLCR_BASE_ADDR + MIO_PIN_47_OFFSET;
+		MIORxAddr = SLCR_BASE_ADDR + MIO_PIN_46_OFFSET;
+	}
+	else
+	{
+		// failure
+		return;
+	}
+
+	regWrite(MIORxAddr, rxMIOsetDefault);
+	regWrite(MIOTxAddr, txMIOsetDefault);
 
 }
 
-static void configureUartClock(void)
+static void configureUartClock(uartCfgType *cfgInstance)
 {
-	RUINT32 uartClksetDefault = 0x00001402U; // uart 0 disabled - uart 1 enabled
+	RUINT32 u4TempVal = 1U;
+	u4TempVal = u4TempVal << cfgInstance->DeviceNum ;
+	RUINT32 uartClksetDefault = 0x00001400U; // uart 0 disabled - uart 0 enabled
+	uartClksetDefault |= u4TempVal;
 	RUINT32 clkCtrlAddr = SLCR_BASE_ADDR + UART_CLK_CONTROL_OFFSET;
 
 	// configure UART reference clock
 	regWrite(clkCtrlAddr, uartClksetDefault); // 50 MHz clock for the UART  - UG585 : p598
 }
 
-static void configuraUartCtrlReg(void)
+static void configuraUartCtrlReg(uartCfgType *cfgInstance)
 {
 	RUINT32 ModeRegAddr = XUARTPS_MR_OFFSET;
 	RUINT32 MRConfigVal = 0x00000020U;
+	if(cfgInstance != NULL)
+	{
+		uartRegWrite(ModeRegAddr, MRConfigVal, cfgInstance);
+	}
 
-	uartRegWrite(ModeRegAddr, MRConfigVal);
+}
+
+static void RxTxPathControl(uartCfgType *pCfgInstance, uartStatusType option)
+{
+	RUINT32 u4ReadCtrlReg;
+	RUINT32 u4TempValue;
+	RUINT32 u4TrialVal;
+
+	if(option == UART_ENABLE)
+	{
+		//enable TX and RX paths
+		//enable rx path - [RXEN] = 1 and [RXDIS] = 0.
+		uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pCfgInstance);
+		u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_RX_EN);
+		u4TrialVal = 0x01 << XUARTPS_CR_RX_DIS;
+		u4TrialVal = ~u4TrialVal;
+		u4TempValue &= u4TrialVal;
+		uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pCfgInstance);
+		//enable tx path - [TXEN] = 1 and [TXDIS] = 0.
+		uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pCfgInstance);
+		u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_EN);
+		u4TrialVal = 0x01 << XUARTPS_CR_TX_DIS;
+		u4TrialVal = ~u4TrialVal;
+		u4TempValue &= u4TrialVal;
+		uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pCfgInstance);
+	}
+	else if(option == UART_DISABLE)
+	{
+		//set control register - disable rx and tx paths
+		// disable rx path - [RXEN] = 0 and [RXDIS] = 1.
+		uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pCfgInstance);
+		u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_RX_DIS);
+		u4TrialVal = 0x01 << XUARTPS_CR_RX_EN;
+		u4TrialVal = ~u4TrialVal;
+		u4TempValue &= u4TrialVal;
+		uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pCfgInstance);
+		// disable tx path - [TXEN] = 0 and [TXDIS] = 1.
+		uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pCfgInstance);
+		u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_DIS);
+		u4TrialVal = 0x01 << XUARTPS_CR_TX_EN;
+		u4TrialVal = ~u4TrialVal;
+		u4TempValue &= u4TrialVal;
+		uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pCfgInstance);
+	}
+	else
+	{
+		// failure
+	}
+
 }
 
 
-ReturnType configureUart(uartCfgType cfgInstance){
+ReturnType InitializeUart(uartCfgType *pCfgInstance)
+{
 	/*
 	 * procedure :
 	 *		1 - reset controller from SLCR register. there is a spesific uart_reset_ctrl register in SLCR register
@@ -274,10 +379,25 @@ ReturnType configureUart(uartCfgType cfgInstance){
 	RUINT32 u4TrialVal;
 	RUINT32 CD_115200 = (RUINT32)62U;
 	RUINT32 BIDV_115200 = (RUINT32)6U;
+	RUINT32 trial;
+
+	uartCfgType* pTempCfgInstance;
+
+	if(pCfgInstance->DeviceNum == UART_INSTANCE_DEVICE_1){
+		pTempCfgInstance = &sCfgInstance_Device1;
+	}
+	else if(pCfgInstance->DeviceNum == UART_INSTANCE_DEVICE_0)
+	{
+		pTempCfgInstance = &sCfgInstance_Device0;
+	}
+	else{
+		// failure
+		return XST_FAILURE;
+	}
+	initializeUartCfg (pTempCfgInstance);
 
 	// read lock slcr register and unlock slcr register
 	// read slcr status register
-	RUINT32 trial;
 	regRead(0xF800000C, &trial); // register was 1 stating that slcr registers are write protected !!!
 	// write lscr write protection unlock register
 	regWrite(0xF8000008, (RUINT32)0xDF0D);
@@ -285,91 +405,64 @@ ReturnType configureUart(uartCfgType cfgInstance){
 	regRead(0xF800000C, &trial); // register is 0 - write protection disabled !!!
 
 	// reset uart controller
-	uartReset();
+	uartReset(pTempCfgInstance);
 	// set IO routings - UART 1 - MIO48 RX - MIO49 TX
-	setIORouting();
+	setIORouting(pTempCfgInstance);
 	// configure UART reference clock
-	configureUartClock();
+	configureUartClock(pTempCfgInstance);
 	/*Configure Uart control register*/
 	//uart character frame - mode register
-	configuraUartCtrlReg();
-
+	configuraUartCtrlReg(pTempCfgInstance);
 
 	//control reg, baud rate reg and baud rate divider reg options for baud rate
 	// write to three registers : control reg, baud_ge_reg, baud_rate_divider_reg
 
-	//set control register - disable rx and tx paths
-	// disable rx path - [RXEN] = 0 and [RXDIS] = 1.
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
-	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_RX_DIS);
-	u4TrialVal = 0x01 << XUARTPS_CR_RX_EN;
-	u4TrialVal = ~u4TrialVal;
-	u4TempValue &= u4TrialVal;
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue);
-	// disable tx path - [TXEN] = 0 and [TXDIS] = 1.
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
-	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_DIS);
-	u4TrialVal = 0x01 << XUARTPS_CR_TX_EN;
-	u4TrialVal = ~u4TrialVal;
-	u4TempValue &= u4TrialVal;
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue);
+	RxTxPathControl(pTempCfgInstance, UART_DISABLE);
 
 	// write calculated CD value to baud rate generator register - CD bit field
-	uartRegWrite(XUARTPS_BRGR_OFFSET, CD_115200);
+	uartRegWrite(XUARTPS_BRGR_OFFSET, CD_115200, pTempCfgInstance);
 	// write BIDV value to baud rate divider register
-	uartRegWrite(XUARTPS_BRDR_OFFSET, BIDV_115200);
+	uartRegWrite(XUARTPS_BRDR_OFFSET, BIDV_115200, pTempCfgInstance);
 
 	// Reset TX and RX paths
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
+	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pTempCfgInstance);
 	u4TempValue = (RUINT32)u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TXRST) | ((RUINT32)0x01 << XUARTPS_CR_RXRST);
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue); // reset TX and RX paths
+	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pTempCfgInstance); // reset TX and RX paths
 
-	//enable TX and RX paths
-	//enable rx path - [RXEN] = 1 and [RXDIS] = 0.
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
-	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_RX_EN);
-	u4TrialVal = 0x01 << XUARTPS_CR_RX_DIS;
-	u4TrialVal = ~u4TrialVal;
-	u4TempValue &= u4TrialVal;
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue);
-	//enable tx path - [TXEN] = 1 and [TXDIS] = 0.
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
-	u4TempValue = u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TX_EN);
-	u4TrialVal = 0x01 << XUARTPS_CR_TX_DIS;
-	u4TrialVal = ~u4TrialVal;
-	u4TempValue &= u4TrialVal;
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue);
+	RxTxPathControl(pCfgInstance, UART_ENABLE);
 
 	// Reset TX and RX paths
-	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg);
+	uartRegRead(XUARTPS_CR_OFFSET, &u4ReadCtrlReg, pTempCfgInstance);
 	u4TempValue = (RUINT32)u4ReadCtrlReg | ((RUINT32)0x01 << XUARTPS_CR_TXRST) | ((RUINT32)0x01 << XUARTPS_CR_RXRST);
-	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue); // reset TX and RX paths
+	uartRegWrite(XUARTPS_CR_OFFSET, u4TempValue, pTempCfgInstance); // reset TX and RX paths
 
 	// set RxFIFO levels - 32
-	uartRegWrite(XUARTPS_RXFIFO_TRIGGER_OFFSET, (RUINT32)0x20);
+	uartRegWrite(XUARTPS_RXFIFO_TRIGGER_OFFSET, (RUINT32)0x01, pTempCfgInstance); // was 32 bytes (0x20)
 
 	//Enable Controller - Write 0x00000117 to control registers - this value coming from datasheet. TODO : make it configurable
-	uartRegWrite(XUARTPS_CR_OFFSET, 0x00000117); // controller enabled
+	uartRegWrite(XUARTPS_CR_OFFSET, 0x00000117, pTempCfgInstance); // controller enabled
 
 	// disable program receive timeout mechanism - write 0 to RSTTO bit field
-	uartRegWrite(XUARTPS_RXTOUT_OFFSET, 0x00); // receiver timeout disabled
+	uartRegWrite(XUARTPS_RXTOUT_OFFSET, 0x00, pTempCfgInstance); // receiver timeout disabled
 
 	//READY TO COMMUNICATE !!!
 	// SO FAR THIS IS DIRECT SOAPING. EVERYTHING IS DIRECTLY SET. TODO : MAKE IT CONFUGIRABLE
 
 	// first trial to send data
 	RUINT8 a1TrialArray[] = "bugra.erbas";
-	TxDataPolling(a1TrialArray, sizeof(a1TrialArray));
+	TxDataPolling(a1TrialArray, sizeof(a1TrialArray), pTempCfgInstance);
+
+	return XST_SUCCESS;
 }
 
 // returns success(0) in case of TX fifo is empty, if not, returns failure (1)
-static ReturnType isTxFifoEmpty(void)
+static ReturnType isTxFifoEmpty(uartCfgType *pCfgInstance)
 {
 	RUINT32 u4RetVal = 0U;
 	RUINT32 u4ReadTxFifo = 0U;
 	RUINT32 u4FifoEmptyMask = 0x01 << XUARTPS_SR_TXEMPTY;
 	RUINT32 u4Temp;
-	uartRegRead(XUARTPS_SR_OFFSET, &u4ReadTxFifo);
+	uartRegRead(XUARTPS_SR_OFFSET, &u4ReadTxFifo, pCfgInstance);
 	u4Temp = u4ReadTxFifo & u4FifoEmptyMask; // bitwise and for masking operation
 	// fifo needs to be empty to transmit data thus, return 1 if empty
 	if(u4Temp == u4FifoEmptyMask)
@@ -380,11 +473,29 @@ static ReturnType isTxFifoEmpty(void)
 	return (ReturnType)u4RetVal;
 }
 
+// returns success(0) in case of TX fifo is empty, if not, returns failure (1)
+static ReturnType isRxFifoFull(uartCfgType *pCfgInstance)
+{
+	RUINT32 u4RetVal = 0U;
+	RUINT32 u4ReadRxFifo = 0U;
+	RUINT32 u4FifoRxFullMask = 0x01 << XUARTPS_SR_RXFULL;
+	RUINT32 u4Temp;
+	uartRegRead(XUARTPS_SR_OFFSET, &u4ReadRxFifo, pCfgInstance);
+	u4Temp = u4ReadRxFifo & u4FifoRxFullMask; // bitwise and for masking operation
+	// fifo needs to be empty to transmit data thus, return 1 if empty
+	if(u4Temp == u4FifoRxFullMask)
+	{
+		u4RetVal = 1U; // Rx fifo is full
+	}
+
+	return (ReturnType)u4RetVal;
+}
+
 /*
  * pu1Data : pointer that holds data that will be transmitted
  * u4size	 : size of bytes that will be transmitted
  */
-static ReturnType TxDataPolling (RUINT8 *pu1Data, RUINT32 u4Size)
+static ReturnType TxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
 {
 	RUINT8 u1TempValue;
 	RUINT32 u4TempAddr;
@@ -400,12 +511,48 @@ static ReturnType TxDataPolling (RUINT8 *pu1Data, RUINT32 u4Size)
 		 * fill the tx fifo with data
 		 * write new data if tx fifo is empty until number of transmissions is done */
 
-		while(!isTxFifoEmpty()); // wait for tx fifo to be empty
+		while(!isTxFifoEmpty(pCfgInstance)); // wait for tx fifo to be empty
 		// fill TX fifo with 1 Byte of pu1Data with
-		uartRegWrite(XUARTPS_FIFO_OFFSET,u1TempValue);
+		uartRegWrite(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);
 	}
 
 }
 
+/*
+ * pu1Data : pointer that received values will be written to
+ * u4size	: size of bytes to be received
+ * pCfgInstance : pointer to the uart device instance hence there are two different instances
+ */
+static ReturnType RxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+{
+	RUINT8 u1TempValue;
+	RUINT32 u4TempAddr;
+	RUINT32 u4Index = 0;
 
+	/*
+	 * wait RxFIFO to fill up to the trigger level
+	 * read data from Rx FIFO
+	 * repeat until required size is read
+	 * TODO : clear if timeout*/
+
+	u4TempAddr = pu1Data;
+
+	for(; u4Index < u4Size; u4Index++)
+	{
+		u1TempValue = *(RUINT8 *)(u4TempAddr + u4Index);
+		while(!isRxFifoFull(pCfgInstance)); // wait for tx fifo to be empty
+		uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);
+	}
+
+}
+
+ReturnType UartSendData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size)
+{
+	TxDataPolling(pu1Data, Size, pCfgInstance);
+}
+
+ReturnType UartReceiveData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size)
+{
+	RxDataPolling(pu1Data, Size, pCfgInstance);
+}
 

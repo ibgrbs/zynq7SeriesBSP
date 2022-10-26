@@ -24,7 +24,18 @@ typedef enum {
 	UART_BAUDRATE_921600 = 921600
 } uartBaudRateType;
 
+typedef enum {
+	UART_INSTANCE_DEVICE_0 = 0,
+	UART_INSTANCE_DEVICE_1 = 1
+} uartDeviceInstanceType;
+
+typedef enum {
+	UART_ENABLE = 0,
+	UART_DISABLE = 1
+} uartStatusType;
+
 typedef struct {
+	uartDeviceInstanceType DeviceNum;
 	RUINT32 u4ControlRegister;
 	uartBaudRateType BaudRate;
 	uartParityType Parity;
@@ -39,8 +50,10 @@ typedef struct {
 	RINT8 Start;
 	RINT8 Size;
 } BITType;
+
 /**************Prototypes******************/
 //static void configureUartregister(const uartConfigureType *cpConfig);
-ReturnType ConfigureUart(uartCfgType cfgInstance);
+ReturnType InitializeUart(uartCfgType *cfgInstance);
+ReturnType UartSendData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size);
 
 #endif /* SRC_UARTDRIVER_UART_H_ */
