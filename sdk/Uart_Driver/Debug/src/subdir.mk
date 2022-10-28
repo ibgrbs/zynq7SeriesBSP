@@ -8,17 +8,17 @@ LD_SRCS += \
 
 C_SRCS += \
 ../src/Uart.c \
-../src/helloworld.c \
+../src/main.c \
 ../src/platform.c 
 
 OBJS += \
 ./src/Uart.o \
-./src/helloworld.o \
+./src/main.o \
 ./src/platform.o 
 
 C_DEPS += \
 ./src/Uart.d \
-./src/helloworld.d \
+./src/main.d \
 ./src/platform.d 
 
 

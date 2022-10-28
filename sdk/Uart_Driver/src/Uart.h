@@ -55,5 +55,6 @@ typedef struct {
 //static void configureUartregister(const uartConfigureType *cpConfig);
 ReturnType InitializeUart(uartCfgType *cfgInstance);
 ReturnType UartSendData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size);
+void xUartPsInterruptHandler(uartCfgType *pCfgInstance);
 
 #endif /* SRC_UARTDRIVER_UART_H_ */

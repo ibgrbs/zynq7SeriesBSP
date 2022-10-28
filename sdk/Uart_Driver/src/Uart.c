@@ -38,6 +38,7 @@
 #include "Uart.h"
 #include "xil_io.h"
 #include "CommonTypes.h"
+
 /**************Preprocessor******************/
 /*System level control registers - SLCR base address*/
 #define SLCR_BASE_ADDR 0xF8000000
@@ -48,6 +49,21 @@
 #define MIO_PIN_49_OFFSET 0x000007C4
 #define UART_CLK_CONTROL_OFFSET 0x00000154
 
+/*Interrupt Enable/Disable registers bit offsets*/
+#define TOVR 12
+#define TNFUL 11
+#define TTRIG 10
+#define XUARTPS_IXR_DMS 9
+#define XUARTPS_IXR_TOUT 8
+#define XUARTPS_IXR_PARITY 7
+#define XUARTPS_IXR_FRAMING 6
+#define XUARTPS_IXR_OVER 5
+#define XUARTPS_IXR_TXFULL 4
+#define XUARTPS_IXR_TXEMPTY 3
+#define XUARTPS_IXR_RXFULL 2
+#define XUARTPS_IXR_RXEMPTY 1
+#define XUARTPS_IXR_RXOVR 0
+
 /*UART Controller base addresses*/
 #define XUARTPS_BASE_ADDR 0xE0000000 // UART devices base addresses without device specification
 #define UARTPS_DEVICE_ADDR_CONST 0x1000 // uart device address specification address
@@ -56,12 +72,16 @@
 #define XUARTPS_CR_OFFSET 0x00000000
 #define XUARTPS_MR_OFFSET 0x00000004
 #define XUARTPS_IER_OFFSET 0x00000008
+#define XUARTPS_IDR_OFFSET 0x0000000C
+#define XUARTPS_ISR_OFFSET 0x00000014
+#define XUARTPS_IMR_OFFSET 0x00000010
 #define XUARTPS_BRGR_OFFSET 0x00000018 // baud rate generator register offset
 #define XUARTPS_BRDR_OFFSET 0x00000034 // baud rate divider register offset
 #define XUARTPS_RXFIFO_TRIGGER_OFFSET 0x0000044 // RX fifo trigger register offset
 #define XUARTPS_RXTOUT_OFFSET 0x0000001C // RX timeout register offset
 #define XUARTPS_SR_OFFSET 0x0000002C // Channel status register offset
 #define XUARTPS_FIFO_OFFSET 0x00000030 // UART TX/RX FIFO
+#define XUARTPS_RXWM_OFFSET 0x00000020 // UART RX FIFO trigger level register
 
 //TODO do the rest
 /*Control register bits positions*/
@@ -116,6 +136,7 @@ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
 //what this control register does is that - set bits of this register and then write this data to spesific register - instance config
 static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
 static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+static ReturnType enableInterrupt(uartCfgType *pCfgInstance);
 /**************Function Prototypes******************/
 
 /*
@@ -170,7 +191,7 @@ static void uartRegWrite (RUINT32 addr, RUINT32 value, uartCfgType *Instance)
  * @description :
  * 		this function reads register value by the address addr.
  */
-static void uartRegRead (RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
 {
 	RUINT32 *tempAddr = (RUINT32 *)(addr + XUARTPS_BASE_ADDR + (UARTPS_DEVICE_ADDR_CONST * Instance->DeviceNum)); // typecast addr val to pointer
 	*value = *tempAddr; // read data and set to pointed by value
@@ -473,19 +494,19 @@ static ReturnType isTxFifoEmpty(uartCfgType *pCfgInstance)
 	return (ReturnType)u4RetVal;
 }
 
-// returns success(0) in case of TX fifo is empty, if not, returns failure (1)
-static ReturnType isRxFifoFull(uartCfgType *pCfgInstance)
+// returns success(0) in case of TX fifo is not empty, if empty returns 1
+static ReturnType isRxFifoEmpty(uartCfgType *pCfgInstance)
 {
 	RUINT32 u4RetVal = 0U;
 	RUINT32 u4ReadRxFifo = 0U;
-	RUINT32 u4FifoRxFullMask = 0x01 << XUARTPS_SR_RXFULL;
+	RUINT32 u4FifoRxFullMask = 0x01 << XUARTPS_SR_RXEMPTY;
 	RUINT32 u4Temp;
+
 	uartRegRead(XUARTPS_SR_OFFSET, &u4ReadRxFifo, pCfgInstance);
 	u4Temp = u4ReadRxFifo & u4FifoRxFullMask; // bitwise and for masking operation
-	// fifo needs to be empty to transmit data thus, return 1 if empty
 	if(u4Temp == u4FifoRxFullMask)
 	{
-		u4RetVal = 1U; // Rx fifo is full
+		u4RetVal = 1U; // Rx fifo is empty
 	}
 
 	return (ReturnType)u4RetVal;
@@ -540,19 +561,109 @@ static ReturnType RxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pC
 	for(; u4Index < u4Size; u4Index++)
 	{
 		u1TempValue = *(RUINT8 *)(u4TempAddr + u4Index);
-		while(!isRxFifoFull(pCfgInstance)); // wait for tx fifo to be empty
-		uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);
-	}
 
+		while(!isRxFifoEmpty(pCfgInstance))
+		{
+			uartRegRead(XUARTPS_FIFO_OFFSET, &u1TempValue, pCfgInstance);// read if rx fifo is not empty
+		}
+	}
 }
+
 
 ReturnType UartSendData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size)
 {
 	TxDataPolling(pu1Data, Size, pCfgInstance);
 }
 
-ReturnType UartReceiveData(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size)
+ReturnType UartReceiveDataPolling(RUINT8 *pu1Data, uartCfgType *pCfgInstance, RUINT32 Size)
 {
 	RxDataPolling(pu1Data, Size, pCfgInstance);
 }
 
+/*
+ * This function is interrupt driven approach for receiving data
+ * pu1Data : pointer that received values will be written to
+ * u4size	: size of bytes to be received
+ * pCfgInstance : pointer to the uart device instance hence there are two different instances
+ */
+static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+{
+	ReturnType retVal = XST_SUCCESS;
+	/*
+	 * approach :
+	 * enable interrupts
+	 * wait rxFIFO to fill or Rxtimeout
+	 * read data from RXFIFO
+	 * do this until FIFO empty
+	 * clear interrupt bit if set
+	 * */
+	retVal += enableInterrupt(pCfgInstance);
+
+}
+
+/*
+ * This function is interrupt driven approach for receiving data
+ * pu1Data : pointer that received values will be written to
+ * u4size	: size of bytes to be received
+ * pCfgInstance : pointer to the uart device instance hence there are two different instances
+ */
+static ReturnType enableInterrupt(uartCfgType *pCfgInstance)
+{
+
+	RUINT32 u4TempRxTriggerLevel = 0x20U; // 32 byte data
+	RUINT32 u4TempReadRegister = 0;
+	RUINT32 u4TempHighVal = 0x01U;
+	//program trigger level
+	uartRegWrite(XUARTPS_RXWM_OFFSET, u4TempRxTriggerLevel, pCfgInstance);
+
+	//enable interrupt
+	// set IER RX FIFO trigger register
+	// clear IDR RX FIFO trigger register
+	// read IER RX FIFO trigger register to check settings
+	uartSetRegBit (XUARTPS_IER_OFFSET, XUARTPS_IXR_RXOVR, pCfgInstance);
+	uartClearRegBit(XUARTPS_IDR_OFFSET, XUARTPS_IXR_RXOVR, pCfgInstance);
+	uartRegRead(XUARTPS_IER_OFFSET, &u4TempReadRegister, pCfgInstance);
+	if((u4TempReadRegister & (u4TempHighVal << XUARTPS_IXR_RXOVR)) == 0x01)
+	{
+		// interrupt enabled - proceed
+		return XST_SUCCESS;
+	}
+
+	return XST_FAILURE;
+}
+
+void xUartPsReceiveDataHandler(uartCfgType *pCfgInstance)
+{
+
+}
+
+void xUartPsInterruptHandler(uartCfgType *pCfgInstance)
+{
+    RUINT32 u4IsrStatus;
+    RUINT32 u4TempMaskReg;
+    RUINT8 u1TempValue;
+
+    /*
+     * Read the interrupt ID register to determine which
+     * interrupt is active
+     */
+	uartRegRead(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
+
+    uartRegRead(XUARTPS_IMR_OFFSET, &u4TempMaskReg, pCfgInstance);
+    u4IsrStatus &= u4TempMaskReg;
+
+    /* Dispatch an appropriate handler. */
+    if ((u4IsrStatus & (XUARTPS_IXR_RXOVR | XUARTPS_IXR_RXEMPTY | XUARTPS_IXR_RXFULL)) != 0U)
+    {
+        /* Received data interrupt */
+		while(!isRxFifoEmpty(pCfgInstance))
+		{
+			uartRegRead(XUARTPS_FIFO_OFFSET, &u1TempValue, pCfgInstance);// read if rx fifo is not empty
+		}
+    }
+
+
+    /* Clear the interrupt status. */
+    uartRegWrite(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
+
+}
