@@ -137,7 +137,10 @@ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
 static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
 static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
 static ReturnType enableInterrupt(uartCfgType *pCfgInstance);
-/**************Function Prototypes******************/
+
+
+RUINT8 a1UartRxArray[1000];
+RUINT32 u4ReceivedDataSize = 0;
 
 /*
  * @param :
@@ -615,7 +618,7 @@ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfg
 static ReturnType enableInterrupt(uartCfgType *pCfgInstance)
 {
 
-	RUINT32 u4TempRxTriggerLevel = 0x20U; // 32 byte data
+	RUINT32 u4TempRxTriggerLevel = 0x8U; // previously 32 byte data
 	RUINT32 u4TempReadRegister = 0;
 	RUINT32 u4TempHighVal = 0x01U;
 	//program trigger level
@@ -627,7 +630,7 @@ static ReturnType enableInterrupt(uartCfgType *pCfgInstance)
 	// read IER RX FIFO trigger register to check settings
 	uartSetRegBit (XUARTPS_IER_OFFSET, XUARTPS_IXR_RXOVR, pCfgInstance);
 	uartClearRegBit(XUARTPS_IDR_OFFSET, XUARTPS_IXR_RXOVR, pCfgInstance);
-	uartRegRead(XUARTPS_IER_OFFSET, &u4TempReadRegister, pCfgInstance);
+	uartRegRead(XUARTPS_IMR_OFFSET, &u4TempReadRegister, pCfgInstance);
 	if((u4TempReadRegister & (u4TempHighVal << XUARTPS_IXR_RXOVR)) == 0x01)
 	{
 		// interrupt enabled - proceed
@@ -646,7 +649,7 @@ void xUartPsInterruptHandler(uartCfgType *pCfgInstance)
 {
     RUINT32 u4IsrStatus;
     RUINT32 u4TempMaskReg;
-    RUINT8 u1TempValue;
+    RUINT32 u4TempAddr = a1UartRxArray;
 
     /*
      * Read the interrupt ID register to determine which
@@ -663,12 +666,25 @@ void xUartPsInterruptHandler(uartCfgType *pCfgInstance)
         /* Received data interrupt */
 		while(!isRxFifoEmpty(pCfgInstance))
 		{
-			uartRegRead(XUARTPS_FIFO_OFFSET, &u1TempValue, pCfgInstance);// read if rx fifo is not empty
+			uartRegRead(XUARTPS_FIFO_OFFSET, (RUINT32 *)(u4TempAddr + u4ReceivedDataSize), pCfgInstance);// read if rx fifo is not empty
+			u4ReceivedDataSize++;
+
 		}
     }
 
+	uartRegRead(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
 
     /* Clear the interrupt status. */
     uartRegWrite(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
+
+//    TxDataPolling((RUINT8 *)u4TempAddr, u4ReceivedDataSize, pCfgInstance);
+//    u4ReceivedDataSize = 0;
+
+    /*clear pending interrupt*/
+    // read ICCIAR register(0xF8F0010C)(Interrupt acknowledge register) to figure out which interurpts are pending/active
+    // write to ICCEOIR register(0xF8F00110)(end of interrupt register) to deassert/clear active or pending interrupts
+//    RUINT32 u4ICCIARRead = 0;
+//    regRead(0xF8F0010C, &u4ICCIARRead);
+//    regWrite(0xF8F00110, u4ICCIARRead);
 
 }

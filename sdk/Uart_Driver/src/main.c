@@ -54,6 +54,7 @@
 
 void setupGIC(XScuGic* InstancePtr, void* intDevicePtr);
 
+
 void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 	RINT32 Status = 0;
 
@@ -82,10 +83,21 @@ void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 				  (Xil_ExceptionHandler) xUartPsInterruptHandler,
 				  intDevicePtr);
 
+
 	/* Enable the interrupt for the device */
 	XScuGic_Enable(InstancePtr, 82);
 
+	/*
+	 * Initialize the exception table.
+	 */
+	Xil_ExceptionInit();
+
+	/* Enable interrupts */
+	 Xil_ExceptionEnable();
 }
+
+extern RUINT8 a1UartRxArray;
+extern RUINT32 u4ReceivedDataSize;
 
 int main()
 {
@@ -114,9 +126,11 @@ int main()
     RUINT32 counter = 0;
     while(1){
     	sleep(1);
-    	UartReceiveDataPolling(trialArray2, &cfgInstance0, sizeof(trialArray2));
-    	UartSendData(trialArray2, &cfgInstance0, sizeof(trialArray2));
-    	counter++;
+//    	UartReceiveDataPolling(trialArray2, &cfgInstance0, sizeof(trialArray2));
+//    	UartSendData(trialArray2, &cfgInstance0, sizeof(trialArray2));
+//    	counter++;
+    	/*this is the received message through out 1 second window*/
+    	UartSendData(a1UartRxArray, &cfgInstance0, u4ReceivedDataSize);
     }
 
     cleanup_platform();
