@@ -473,6 +473,8 @@ ReturnType InitializeUart(uartCfgType *pCfgInstance)
 	RUINT8 a1TrialArray[] = "bugra.erbas";
 	TxDataPolling(a1TrialArray, sizeof(a1TrialArray), pTempCfgInstance);
 
+	enableInterrupt(pCfgInstance);
+
 	return XST_SUCCESS;
 }
 
@@ -546,7 +548,7 @@ static ReturnType TxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pC
  */
 static ReturnType RxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
 {
-	RUINT8 u1TempValue;
+	RUINT8* u1TempValue;
 	RUINT32 u4TempAddr;
 	RUINT32 u4Index = 0;
 
@@ -557,15 +559,18 @@ static ReturnType RxDataPolling(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pC
 	 * TODO : clear if timeout*/
 
 	u4TempAddr = pu1Data;
+	u1TempValue = (RUINT8 *)(u4TempAddr);
 
-	for(; u4Index < u4Size; u4Index++)
-	{
-		u1TempValue = *(RUINT8 *)(u4TempAddr + u4Index);
-
-		while(!isRxFifoEmpty(pCfgInstance))
-		{
-			uartRegRead(XUARTPS_FIFO_OFFSET, &u1TempValue, pCfgInstance);// read if rx fifo is not empty
+	while(u4Index < u4Size){
+		if(!isRxFifoEmpty(pCfgInstance)){
+			uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
 		}
+		else
+			break;
+
+		u4Index++;
+		u1TempValue = (RUINT8 *)(u4TempAddr + u4Index);
+
 	}
 }
 
