@@ -67,6 +67,11 @@ void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 	Status = XScuGic_CfgInitialize(InstancePtr, IntcConfig, IntcConfig->CpuBaseAddress);
 
 	/*
+	 * Initialize the exception table.
+	 */
+	Xil_ExceptionInit();
+
+	/*
 	 * Connect the interrupt controller interrupt handler to the
 	 * hardware interrupt handling logic in the processor.
 	 */
@@ -87,10 +92,6 @@ void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 	/* Enable the interrupt for the device */
 	XScuGic_Enable(InstancePtr, 82);
 
-	/*
-	 * Initialize the exception table.
-	 */
-	Xil_ExceptionInit();
 
 	/* Enable interrupts */
 	 Xil_ExceptionEnable();
@@ -130,7 +131,7 @@ int main()
 //    	UartSendData(trialArray2, &cfgInstance0, sizeof(trialArray2));
 //    	counter++;
     	/*this is the received message through out 1 second window*/
-    	UartSendData(a1UartRxArray, &cfgInstance0, u4ReceivedDataSize);
+    	//UartSendData(a1UartRxArray, &cfgInstance0, u4ReceivedDataSize);
     }
 
     cleanup_platform();

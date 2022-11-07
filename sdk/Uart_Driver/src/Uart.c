@@ -140,7 +140,6 @@ static ReturnType enableInterrupt(uartCfgType *pCfgInstance);
 
 
 RUINT8 a1UartRxArray[1000];
-RUINT32 u4ReceivedDataSize = 0;
 
 /*
  * @param :
@@ -618,7 +617,7 @@ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfg
 static ReturnType enableInterrupt(uartCfgType *pCfgInstance)
 {
 
-	RUINT32 u4TempRxTriggerLevel = 0x8U; // previously 32 byte data
+	RUINT32 u4TempRxTriggerLevel = 0x1U; // previously 32 byte data
 	RUINT32 u4TempReadRegister = 0;
 	RUINT32 u4TempHighVal = 0x01U;
 	//program trigger level
@@ -650,6 +649,9 @@ void xUartPsInterruptHandler(uartCfgType *pCfgInstance)
     RUINT32 u4IsrStatus;
     RUINT32 u4TempMaskReg;
     RUINT32 u4TempAddr = a1UartRxArray;
+    RUINT32 u4TempRead;
+    RUINT32 u4TempLogicHigh = 0x1U;
+    RUINT32 u4ReceivedDataSize = 0;
 
     /*
      * Read the interrupt ID register to determine which
@@ -661,30 +663,58 @@ void xUartPsInterruptHandler(uartCfgType *pCfgInstance)
     u4IsrStatus &= u4TempMaskReg;
 
     /* Dispatch an appropriate handler. */
-    if ((u4IsrStatus & (XUARTPS_IXR_RXOVR | XUARTPS_IXR_RXEMPTY | XUARTPS_IXR_RXFULL)) != 0U)
+    if ((u4IsrStatus & ((u4TempLogicHigh << XUARTPS_IXR_RXOVR) | (u4TempLogicHigh <<XUARTPS_IXR_RXEMPTY) | (u4TempLogicHigh << XUARTPS_IXR_RXFULL))) != 0U)
     {
         /* Received data interrupt */
 		while(!isRxFifoEmpty(pCfgInstance))
 		{
 			uartRegRead(XUARTPS_FIFO_OFFSET, (RUINT32 *)(u4TempAddr + u4ReceivedDataSize), pCfgInstance);// read if rx fifo is not empty
 			u4ReceivedDataSize++;
-
 		}
     }
 
-	uartRegRead(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
+    /* Clear the interrupt status since UART interrup status bits are sticky, meaning : unless they are cleared by writing 1 to the
+     * position of the bit that is logic high which would result in '0' - logic low in that bit position, these interrupts would keep going */
+    uartRegWrite(XUARTPS_ISR_OFFSET, u4IsrStatus, pCfgInstance);
 
-    /* Clear the interrupt status. */
-    uartRegWrite(XUARTPS_ISR_OFFSET, &u4IsrStatus, pCfgInstance);
+    UartSendData(a1UartRxArray, pCfgInstance, u4ReceivedDataSize);
 
-//    TxDataPolling((RUINT8 *)u4TempAddr, u4ReceivedDataSize, pCfgInstance);
-//    u4ReceivedDataSize = 0;
+    //    TxDataPolling((RUINT8 *)u4TempAddr, u4ReceivedDataSize, pCfgInstance);
+    //    u4ReceivedDataSize = 0;
 
     /*clear pending interrupt*/
     // read ICCIAR register(0xF8F0010C)(Interrupt acknowledge register) to figure out which interurpts are pending/active
     // write to ICCEOIR register(0xF8F00110)(end of interrupt register) to deassert/clear active or pending interrupts
-//    RUINT32 u4ICCIARRead = 0;
-//    regRead(0xF8F0010C, &u4ICCIARRead);
-//    regWrite(0xF8F00110, u4ICCIARRead);
+    //    RUINT32 u4ICCIARRead = 0;
+    //    regRead(0xF8F0010C, &u4ICCIARRead);
+    //    regWrite(0xF8F00110, u4ICCIARRead);
+
+    /*read interrup acknowledge register(ICCIAR) or write 1 to corresponding bit of ICDICPR (interrupt clear pending register)*/
+    // trial - read ICCIAR
+	//    regRead(0xf8f01288, &u4TempRead); // read value is 0x00040000 which is that 18th bit is 1 -> this means according to the calc below, interrupt ID #82 is pending
+	//    // it requires clear pending operation - proceed clear pending
+	//    regWrite(0xf8f01288, &u4TempRead);
+	//
+	//    u4TempRead = 0x0U;
+	//    regRead(0xf8f01288, &u4TempRead);
+    /*
+	 * For interrupt ID N, when DIV and MOD are the integer division and modulo operations:
+		• the corresponding ICDICPR number, M, is given by M = N DIV 32
+		• the offset of the required ICDICPR is (0x280 + (4*M))
+		• the bit number of the required Set-pending bit in this register is N MOD 32.
+
+		-> for our case - ID is 82, thus :
+		N = 82
+		M = 82 / 32 = 2 (read ICDICPR2 - 0xf8f01288)
+		bit pos : 82 mod 32 -> bit pos 18
+*/
+
+    // write 1 to the corresponding status register -> to do that first read register and write the read value back to the register
+    /*
+		The Chnl_int_sts_reg0 register can be read for status and generate an interrupt. The Channel_sts_reg0
+		register can only be read for status.
+		The Chnl_int_sts_reg0 register is sticky; once a bit is set, the bit stays set until software clears it. Write
+		a 1 to clear a bit
+     */
 
 }
