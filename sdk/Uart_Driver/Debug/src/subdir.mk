@@ -7,16 +7,19 @@ LD_SRCS += \
 ../src/lscript.ld 
 
 C_SRCS += \
+../src/GIC.c \
 ../src/Uart.c \
 ../src/main.c \
 ../src/platform.c 
 
 OBJS += \
+./src/GIC.o \
 ./src/Uart.o \
 ./src/main.o \
 ./src/platform.o 
 
 C_DEPS += \
+./src/GIC.d \
 ./src/Uart.d \
 ./src/main.d \
 ./src/platform.d 

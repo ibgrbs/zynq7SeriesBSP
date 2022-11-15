@@ -1,0 +1,21 @@
+/*
+ * GIC.c
+ *
+ *  Created on: Nov 13, 2022
+ *      Author: bugra's PC
+ */
+
+
+#include "GIC.h"
+
+
+
+/*general info :
+ * distributor
+ * 	-> receives the interrupt signals
+ * 	-> forwarding interrupt signals to CPU GIC controller
+ * 	-> enabling / disabling interrupts
+ * 	-> setting priorities to interrupts
+ * 	-> setting target processor of the interrupts (which interrupt signal will be feed into which CPU)
+ * 	-> setting interrupt level sensitivity or edge triggered (sensitivity) option
+ * GIC controller*/

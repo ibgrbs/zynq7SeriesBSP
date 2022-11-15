@@ -6222,3 +6222,13 @@ con
 
 19:50:51 INFO  : Launch script is exported to file 'C:\Github\zynqBSP\zynqBSP\sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\system_debugger_using_debug_uart_driver.elf_on_local.tcl'
 19:55:34 INFO  : Disconnected from the channel tcfchan#6.
+20:14:20 INFO  : Registering command handlers for SDK TCF services
+20:14:21 INFO  : Launching XSCT server: xsct.bat -interactive C:\Github\zynqBSP\zynqBSP\sdk\temp_xsdb_launch_script.tcl
+20:14:24 INFO  : XSCT server has started successfully.
+20:14:24 INFO  : Successfully done setting XSCT server connection channel  
+20:14:27 INFO  : Successfully done setting SDK workspace  
+14:51:38 INFO  : Registering command handlers for SDK TCF services
+14:51:39 INFO  : Launching XSCT server: xsct.bat -interactive C:\Github\zynqBSP\zynqBSP\sdk\temp_xsdb_launch_script.tcl
+14:51:41 INFO  : XSCT server has started successfully.
+14:51:43 INFO  : Successfully done setting XSCT server connection channel  
+14:51:43 INFO  : Successfully done setting SDK workspace  
