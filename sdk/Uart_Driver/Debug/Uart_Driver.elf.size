@@ -1,2 +1,2 @@
    text	   data	    bss	    dec	    hex	filename
-  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf

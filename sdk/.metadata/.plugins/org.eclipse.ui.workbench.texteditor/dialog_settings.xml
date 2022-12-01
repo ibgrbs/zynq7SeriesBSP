@@ -2,12 +2,17 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="ICDDCR" key="selection"/>
+		<item value="IRQInterrupt" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="IRQInterrupt"/>
+			<item value="_vector_table"/>
+			<item value="vectors"/>
+			<item value="vector_base"/>
+			<item value="_vector_table,"/>
 			<item value="ICDDCR"/>
 		</list>
 		<list key="replacehistory">

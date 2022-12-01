@@ -4290,3 +4290,2074 @@ arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
   27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
 'Finished building: Uart_Driver.elf.size'
 ' '
+21:02:15 **** Clean-only build of configuration Debug for project Uart_Driver ****
+make clean 
+rm -rf  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o  ./src/GIC.d ./src/Uart.d ./src/main.d ./src/platform.d  Uart_Driver.elf.size  Uart_Driver.elf
+' '
+21:02:15 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+'Finished building: ../src/GIC.c'
+' '
+'Building file: ../src/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/Uart.d" -MT"src/Uart.o" -o "src/Uart.o" "../src/Uart.c"
+../src/Uart.c: In function 'uartReset':
+../src/Uart.c:243:2: warning: implicit declaration of function 'usleep'; did you mean 'fseek'? [-Wimplicit-function-declaration]
+  usleep(10000); // wait for 10ms
+  ^~~~~~
+  fseek
+../src/Uart.c: In function 'InitializeUart':
+../src/Uart.c:402:10: warning: unused variable 'u4TrialVal' [-Wunused-variable]
+  RUINT32 u4TrialVal;
+          ^~~~~~~~~~
+../src/Uart.c: In function 'TxDataPolling':
+../src/Uart.c:529:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:544:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'RxDataPolling':
+../src/Uart.c:563:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:568:37: warning: passing argument 2 of 'uartRegRead' from incompatible pointer type [-Wincompatible-pointer-types]
+    uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
+                                     ^~~~~~~~~~~
+../src/Uart.c:196:48: note: expected 'RUINT32 *' {aka 'unsigned int *'} but argument is of type 'RUINT8 *' {aka 'unsigned char *'}
+ static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+                                       ~~~~~~~~~^~~~~
+../src/Uart.c:577:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'receiveData':
+../src/Uart.c:609:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'xUartPsInterruptHandler':
+../src/Uart.c:651:26: warning: initialization of 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+     RUINT32 u4TempAddr = a1UartRxArray;
+                          ^~~~~~~~~~~~~
+../src/Uart.c:652:13: warning: unused variable 'u4TempRead' [-Wunused-variable]
+     RUINT32 u4TempRead;
+             ^~~~~~~~~~
+../src/Uart.c: At top level:
+../src/Uart.c:135:19: warning: 'isRxFifoFull' declared 'static' but never defined [-Wunused-function]
+ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
+                   ^~~~~~~~~~~~
+../src/Uart.c:137:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c:138:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c: In function 'UartSendData':
+../src/Uart.c:583:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'UartReceiveDataPolling':
+../src/Uart.c:588:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+At top level:
+../src/Uart.c:596:19: warning: 'receiveData' defined but not used [-Wunused-function]
+ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+                   ^~~~~~~~~~~
+'Finished building: ../src/Uart.c'
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:118:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:129:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:127:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:124:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:123:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:112:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:105:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building file: ../src/platform.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/platform.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/platform.d" -MT"src/platform.o" -o "src/platform.o" "../src/platform.c"
+'Finished building: ../src/platform.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:03:38 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/Uart.d" -MT"src/Uart.o" -o "src/Uart.o" "../src/Uart.c"
+../src/Uart.c: In function 'uartReset':
+../src/Uart.c:243:2: warning: implicit declaration of function 'usleep'; did you mean 'fseek'? [-Wimplicit-function-declaration]
+  usleep(10000); // wait for 10ms
+  ^~~~~~
+  fseek
+../src/Uart.c: In function 'InitializeUart':
+../src/Uart.c:402:10: warning: unused variable 'u4TrialVal' [-Wunused-variable]
+  RUINT32 u4TrialVal;
+          ^~~~~~~~~~
+../src/Uart.c: In function 'TxDataPolling':
+../src/Uart.c:529:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:544:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'RxDataPolling':
+../src/Uart.c:563:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:568:37: warning: passing argument 2 of 'uartRegRead' from incompatible pointer type [-Wincompatible-pointer-types]
+    uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
+                                     ^~~~~~~~~~~
+../src/Uart.c:196:48: note: expected 'RUINT32 *' {aka 'unsigned int *'} but argument is of type 'RUINT8 *' {aka 'unsigned char *'}
+ static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+                                       ~~~~~~~~~^~~~~
+../src/Uart.c:577:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'receiveData':
+../src/Uart.c:609:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'xUartPsInterruptHandler':
+../src/Uart.c:651:26: warning: initialization of 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+     RUINT32 u4TempAddr = a1UartRxArray;
+                          ^~~~~~~~~~~~~
+../src/Uart.c:652:13: warning: unused variable 'u4TempRead' [-Wunused-variable]
+     RUINT32 u4TempRead;
+             ^~~~~~~~~~
+../src/Uart.c: At top level:
+../src/Uart.c:135:19: warning: 'isRxFifoFull' declared 'static' but never defined [-Wunused-function]
+ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
+                   ^~~~~~~~~~~~
+../src/Uart.c:137:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c:138:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c: In function 'UartSendData':
+../src/Uart.c:583:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'UartReceiveDataPolling':
+../src/Uart.c:588:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+At top level:
+../src/Uart.c:596:19: warning: 'receiveData' defined but not used [-Wunused-function]
+ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+                   ^~~~~~~~~~~
+'Finished building: ../src/Uart.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:03:49 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:04:38 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/Uart.d" -MT"src/Uart.o" -o "src/Uart.o" "../src/Uart.c"
+../src/Uart.c: In function 'uartReset':
+../src/Uart.c:243:2: warning: implicit declaration of function 'usleep'; did you mean 'fseek'? [-Wimplicit-function-declaration]
+  usleep(10000); // wait for 10ms
+  ^~~~~~
+  fseek
+../src/Uart.c: In function 'InitializeUart':
+../src/Uart.c:402:10: warning: unused variable 'u4TrialVal' [-Wunused-variable]
+  RUINT32 u4TrialVal;
+          ^~~~~~~~~~
+../src/Uart.c: In function 'TxDataPolling':
+../src/Uart.c:529:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:544:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'RxDataPolling':
+../src/Uart.c:563:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:568:37: warning: passing argument 2 of 'uartRegRead' from incompatible pointer type [-Wincompatible-pointer-types]
+    uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
+                                     ^~~~~~~~~~~
+../src/Uart.c:196:48: note: expected 'RUINT32 *' {aka 'unsigned int *'} but argument is of type 'RUINT8 *' {aka 'unsigned char *'}
+ static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+                                       ~~~~~~~~~^~~~~
+../src/Uart.c:577:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'receiveData':
+../src/Uart.c:609:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'xUartPsInterruptHandler':
+../src/Uart.c:651:26: warning: initialization of 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+     RUINT32 u4TempAddr = a1UartRxArray;
+                          ^~~~~~~~~~~~~
+../src/Uart.c:652:13: warning: unused variable 'u4TempRead' [-Wunused-variable]
+     RUINT32 u4TempRead;
+             ^~~~~~~~~~
+../src/Uart.c: At top level:
+../src/Uart.c:135:19: warning: 'isRxFifoFull' declared 'static' but never defined [-Wunused-function]
+ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
+                   ^~~~~~~~~~~~
+../src/Uart.c:137:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c:138:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c: In function 'UartSendData':
+../src/Uart.c:583:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'UartReceiveDataPolling':
+../src/Uart.c:588:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+At top level:
+../src/Uart.c:596:19: warning: 'receiveData' defined but not used [-Wunused-function]
+ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+                   ^~~~~~~~~~~
+'Finished building: ../src/Uart.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:04:49 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/Uart.d" -MT"src/Uart.o" -o "src/Uart.o" "../src/Uart.c"
+../src/Uart.c: In function 'uartReset':
+../src/Uart.c:243:2: warning: implicit declaration of function 'usleep'; did you mean 'fseek'? [-Wimplicit-function-declaration]
+  usleep(10000); // wait for 10ms
+  ^~~~~~
+  fseek
+../src/Uart.c: In function 'InitializeUart':
+../src/Uart.c:402:10: warning: unused variable 'u4TrialVal' [-Wunused-variable]
+  RUINT32 u4TrialVal;
+          ^~~~~~~~~~
+../src/Uart.c: In function 'TxDataPolling':
+../src/Uart.c:529:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:544:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'RxDataPolling':
+../src/Uart.c:563:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:568:37: warning: passing argument 2 of 'uartRegRead' from incompatible pointer type [-Wincompatible-pointer-types]
+    uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
+                                     ^~~~~~~~~~~
+../src/Uart.c:196:48: note: expected 'RUINT32 *' {aka 'unsigned int *'} but argument is of type 'RUINT8 *' {aka 'unsigned char *'}
+ static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+                                       ~~~~~~~~~^~~~~
+../src/Uart.c:577:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'receiveData':
+../src/Uart.c:609:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'xUartPsInterruptHandler':
+../src/Uart.c:651:26: warning: initialization of 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+     RUINT32 u4TempAddr = a1UartRxArray;
+                          ^~~~~~~~~~~~~
+../src/Uart.c:652:13: warning: unused variable 'u4TempRead' [-Wunused-variable]
+     RUINT32 u4TempRead;
+             ^~~~~~~~~~
+../src/Uart.c: At top level:
+../src/Uart.c:135:19: warning: 'isRxFifoFull' declared 'static' but never defined [-Wunused-function]
+ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
+                   ^~~~~~~~~~~~
+../src/Uart.c:137:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c:138:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c: In function 'UartSendData':
+../src/Uart.c:583:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'UartReceiveDataPolling':
+../src/Uart.c:588:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+At top level:
+../src/Uart.c:596:19: warning: 'receiveData' defined but not used [-Wunused-function]
+ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+                   ^~~~~~~~~~~
+'Finished building: ../src/Uart.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:04:52 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:05:16 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/Uart.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/Uart.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/Uart.d" -MT"src/Uart.o" -o "src/Uart.o" "../src/Uart.c"
+../src/Uart.c: In function 'uartReset':
+../src/Uart.c:243:2: warning: implicit declaration of function 'usleep'; did you mean 'fseek'? [-Wimplicit-function-declaration]
+  usleep(10000); // wait for 10ms
+  ^~~~~~
+  fseek
+../src/Uart.c: In function 'InitializeUart':
+../src/Uart.c:402:10: warning: unused variable 'u4TrialVal' [-Wunused-variable]
+  RUINT32 u4TrialVal;
+          ^~~~~~~~~~
+../src/Uart.c: In function 'TxDataPolling':
+../src/Uart.c:529:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:544:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'RxDataPolling':
+../src/Uart.c:563:13: warning: assignment to 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+  u4TempAddr = pu1Data;
+             ^
+../src/Uart.c:568:37: warning: passing argument 2 of 'uartRegRead' from incompatible pointer type [-Wincompatible-pointer-types]
+    uartRegRead(XUARTPS_FIFO_OFFSET, u1TempValue, pCfgInstance);// read if rx fifo is not empty
+                                     ^~~~~~~~~~~
+../src/Uart.c:196:48: note: expected 'RUINT32 *' {aka 'unsigned int *'} but argument is of type 'RUINT8 *' {aka 'unsigned char *'}
+ static void uartRegRead(RUINT32 addr, RUINT32 *value, uartCfgType *Instance)
+                                       ~~~~~~~~~^~~~~
+../src/Uart.c:577:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'receiveData':
+../src/Uart.c:609:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'xUartPsInterruptHandler':
+../src/Uart.c:651:26: warning: initialization of 'RUINT32' {aka 'unsigned int'} from 'RUINT8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+     RUINT32 u4TempAddr = a1UartRxArray;
+                          ^~~~~~~~~~~~~
+../src/Uart.c:652:13: warning: unused variable 'u4TempRead' [-Wunused-variable]
+     RUINT32 u4TempRead;
+             ^~~~~~~~~~
+../src/Uart.c: At top level:
+../src/Uart.c:135:19: warning: 'isRxFifoFull' declared 'static' but never defined [-Wunused-function]
+ static ReturnType isRxFifoFull(uartCfgType *pCfgInstance);
+                   ^~~~~~~~~~~~
+../src/Uart.c:137:19: warning: 'uartTx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartTx(RUINT32 *TxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c:138:19: warning: 'uartRx' declared 'static' but never defined [-Wunused-function]
+ static ReturnType uartRx(RUINT32 *RxBuffer, RUINT32 size);
+                   ^~~~~~
+../src/Uart.c: In function 'UartSendData':
+../src/Uart.c:583:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../src/Uart.c: In function 'UartReceiveDataPolling':
+../src/Uart.c:588:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+At top level:
+../src/Uart.c:596:19: warning: 'receiveData' defined but not used [-Wunused-function]
+ static ReturnType receiveData(RUINT8 *pu1Data, RUINT32 u4Size, uartCfgType *pCfgInstance)
+                   ^~~~~~~~~~~
+'Finished building: ../src/Uart.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27276	   1920	  23624	  52820	   ce54	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:05:29 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:27:58 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:120:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:131:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:129:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:126:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:125:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:114:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:107:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24064	   1144	  23608	  48816	   beb0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:04 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:120:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:131:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:129:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:126:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:125:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:114:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:107:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24064	   1144	  23608	  48816	   beb0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:18 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:130:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:141:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:139:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:136:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:135:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:124:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:117:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27012	   1144	  23624	  51780	   ca44	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:21 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:130:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:141:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:139:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:136:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:135:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:124:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:117:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27012	   1144	  23624	  51780	   ca44	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:25 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:132:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:143:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:141:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:138:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:137:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:126:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:119:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27012	   1144	  23624	  51780	   ca44	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:41 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:132:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:143:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:141:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:138:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:137:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:126:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:119:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27012	   1144	  23624	  51780	   ca44	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:28:51 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:133:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:144:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:142:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:139:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:138:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:127:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:120:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27020	   1144	  23624	  51788	   ca4c	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:29:24 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(RUINT32 IntId)
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:113:29: error: expected expression before 'RUINT32'
+  DistributorEnableInterrupt(RUINT32 IntId)
+                             ^~~~~~~
+../src/main.c:113:43: error: expected ';' before '}' token
+  DistributorEnableInterrupt(RUINT32 IntId)
+                                           ^
+                                           ;
+ }
+ ~                                          
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:134:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:145:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:143:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:140:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:139:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:128:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:121:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+make: *** [src/subdir.mk:32: src/main.o] Error 1
+21:29:27 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82)
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:113:32: error: expected ';' before '}' token
+  DistributorEnableInterrupt(82)
+                                ^
+                                ;
+ }
+ ~                               
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:134:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:145:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:143:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:140:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:139:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:128:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:121:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+make: *** [src/subdir.mk:32: src/main.o] Error 1
+21:29:29 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:134:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:145:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:143:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:140:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:139:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:128:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:121:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24344	   1144	  23608	  49096	   bfc8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:29:58 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:114:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:135:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:146:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:144:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:141:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:140:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:129:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:122:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24352	   1144	  23608	  49104	   bfd0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:30:00 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:137:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:148:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:146:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:143:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:142:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:131:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:124:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24352	   1144	  23608	  49104	   bfd0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:30:08 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:30:20 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:35:55 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:35:58 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:37:57 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24360	   1144	  23608	  49112	   bfd8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:38:07 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:43:33 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24352	   1144	  23608	  49104	   bfd0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:43:35 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:45:57 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27324	   1920	  23624	  52868	   ce84	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+21:56:51 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:57:43 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+21:58:17 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:01:03 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:01:29 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:02:03 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:02:17 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:04:12 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27332	   1920	  23624	  52876	   ce8c	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:05:38 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27268	   1920	  23624	  52812	   ce4c	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:05:40 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:06:16 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24368	   1144	  23608	  49120	   bfe0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:06:24 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:07:51 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27332	   1920	  23624	  52876	   ce8c	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:07:57 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:20:31 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:20:47 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24368	   1144	  23608	  49120	   bfe0	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:20:53 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:21:44 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:21:47 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:44:08 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:44:10 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:44:17 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:44:20 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:45:28 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:45:36 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:59:9: warning: variable 'Status' set but not used [-Wunused-but-set-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:45:50 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:47:37 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:47:56 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+22:53:09 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:54:51 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/GIC.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/GIC.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/GIC.d" -MT"src/GIC.o" -o "src/GIC.o" "../src/GIC.c"
+../src/GIC.c: In function 'DistributorEnableInterrupt':
+../src/GIC.c:114:16: warning: unused variable 'cu4TotalIntNum' [-Wunused-variable]
+  const RUINT32 cu4TotalIntNum = 96U;
+                ^~~~~~~~~~~~~~
+'Finished building: ../src/GIC.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  27340	   1920	  23624	  52884	   ce94	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:56:23 **** Auto Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/main.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/main.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../BaseProject_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'setupGIC':
+../src/main.c:101:2: warning: implicit declaration of function 'InitDistributor' [-Wimplicit-function-declaration]
+  InitDistributor();
+  ^~~~~~~~~~~~~~~
+../src/main.c:102:2: warning: implicit declaration of function 'InitCPUInterface' [-Wimplicit-function-declaration]
+  InitCPUInterface();
+  ^~~~~~~~~~~~~~~~
+../src/main.c:113:2: warning: implicit declaration of function 'DistributorEnableInterrupt' [-Wimplicit-function-declaration]
+  DistributorEnableInterrupt(82);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.c:115:2: warning: implicit declaration of function 'enableDistributor' [-Wimplicit-function-declaration]
+  enableDistributor();
+  ^~~~~~~~~~~~~~~~~
+../src/main.c:62:18: warning: unused variable 'IntcConfig' [-Wunused-variable]
+  XScuGic_Config *IntcConfig; /* Config for interrupt controller */
+                  ^~~~~~~~~~
+../src/main.c:59:9: warning: unused variable 'Status' [-Wunused-variable]
+  RINT32 Status = 0;
+         ^~~~~~
+../src/main.c: In function 'main':
+../src/main.c:139:5: warning: implicit declaration of function 'initializeUartCfg'; did you mean 'InitializeUart'? [-Wimplicit-function-declaration]
+     initializeUartCfg (&cfgInstance0);
+     ^~~~~~~~~~~~~~~~~
+     InitializeUart
+../src/main.c:150:6: warning: implicit declaration of function 'sleep'; did you mean 'strsep'? [-Wimplicit-function-declaration]
+      sleep(1);
+      ^~~~~
+      strsep
+../src/main.c:148:13: warning: unused variable 'counter' [-Wunused-variable]
+     RUINT32 counter = 0;
+             ^~~~~~~
+../src/main.c:145:12: warning: unused variable 'trialArray2' [-Wunused-variable]
+     RUINT8 trialArray2[] = "this message is the received \r\n";
+            ^~~~~~~~~~~
+../src/main.c:144:12: warning: unused variable 'trialArray' [-Wunused-variable]
+     RUINT8 trialArray[] = "hello from my driver \r\n";
+            ^~~~~~~~~~
+../src/main.c:133:17: warning: variable 'cfgInstance1' set but not used [-Wunused-but-set-variable]
+     uartCfgType cfgInstance1;
+                 ^~~~~~~~~~~~
+../src/main.c:126:6: warning: unused variable 'Status' [-Wunused-variable]
+  int Status;
+      ^~~~~~
+'Finished building: ../src/main.c'
+' '
+'Building target: Uart_Driver.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../BaseProject_bsp/ps7_cortexa9_0/lib -o "Uart_Driver.elf"  ./src/GIC.o ./src/Uart.o ./src/main.o ./src/platform.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Uart_Driver.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Uart_Driver.elf  |tee "Uart_Driver.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  24376	   1144	  23608	  49128	   bfe8	Uart_Driver.elf
+'Finished building: Uart_Driver.elf.size'
+' '
+22:56:28 **** Incremental Build of configuration Debug for project Uart_Driver ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.

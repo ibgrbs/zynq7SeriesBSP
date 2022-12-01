@@ -62,14 +62,45 @@ void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 	XScuGic_Config *IntcConfig; /* Config for interrupt controller */
 
 	/* Initialize the interrupt controller driver */
-	IntcConfig = XScuGic_LookupConfig(0);
+//	IntcConfig = XScuGic_LookupConfig(0);
+//
+//	Status = XScuGic_CfgInitialize(InstancePtr, IntcConfig, IntcConfig->CpuBaseAddress);
+//
+//	/*
+//	 * Initialize the exception table.
+//	 */
+//	Xil_ExceptionInit();
+//
+//	/*
+//	 * Connect the interrupt controller interrupt handler to the
+//	 * hardware interrupt handling logic in the processor.
+//	 */
+//	Xil_ExceptionRegisterHandler(5U,
+//				(Xil_ExceptionHandler) XScuGic_InterruptHandler,
+//				InstancePtr);
+//
+//	/*
+//	 * Connect a device driver handler that will be called when an
+//	 * interrupt for the device occurs, the device driver handler
+//	 * performs the specific interrupt processing for the device
+//	 */
+//	Status = XScuGic_Connect(InstancePtr, 82,
+//				  (Xil_ExceptionHandler) xUartPsInterruptHandler,
+//				  intDevicePtr);
+//
+//
+//	/* Enable the interrupt for the device */
+//	XScuGic_Enable(InstancePtr, 82);
+//
+//
+//	/* Enable interrupts */
+//	 Xil_ExceptionEnable();
 
-	Status = XScuGic_CfgInitialize(InstancePtr, IntcConfig, IntcConfig->CpuBaseAddress);
+	/*My GIC driver trial*/
 
-	/*
-	 * Initialize the exception table.
-	 */
-	Xil_ExceptionInit();
+	InitDistributor();
+	InitCPUInterface();
+
 
 	/*
 	 * Connect the interrupt controller interrupt handler to the
@@ -79,22 +110,12 @@ void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
 				(Xil_ExceptionHandler) XScuGic_InterruptHandler,
 				InstancePtr);
 
-	/*
-	 * Connect a device driver handler that will be called when an
-	 * interrupt for the device occurs, the device driver handler
-	 * performs the specific interrupt processing for the device
-	 */
-	Status = XScuGic_Connect(InstancePtr, 82,
-				  (Xil_ExceptionHandler) xUartPsInterruptHandler,
-				  intDevicePtr);
+	DistributorEnableInterrupt(82);
 
+	enableDistributor();
 
-	/* Enable the interrupt for the device */
-	XScuGic_Enable(InstancePtr, 82);
+	Xil_ExceptionEnable();
 
-
-	/* Enable interrupts */
-	 Xil_ExceptionEnable();
 }
 
 extern RUINT8 a1UartRxArray;

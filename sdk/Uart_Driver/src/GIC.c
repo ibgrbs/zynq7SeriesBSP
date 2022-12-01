@@ -124,8 +124,8 @@ void DistributorEnableInterrupt(RUINT32 IntId)
 	 * ICDISER2 -> 64:95
 	 * */
 
-	u4TempBitOffset = IntId % cu4TotalIntNum;
-	u4TempRegisterOffset = ((IntId - u4TempBitOffset) / u4ModBase) - 1U;
+	u4TempBitOffset = IntId % u4ModBase;
+	u4TempRegisterOffset = IntId / u4ModBase;//((IntId - u4TempBitOffset) / u4ModBase) - 1U;
 
 	readGICReg(&u4TempReadRegister, ICDISEROffset(u4TempRegisterOffset));
 
@@ -158,24 +158,26 @@ void InitDistributor()
 
 	RUINT32 u4Index = 0;
 	// set ICDICFR2, 3 and 4 to rising edge (0xFFFFFFFF - not sure if this is true)
-	writeGICReg(0xFFFFFFFF, ICDFROffset(2));
-	writeGICReg(0xFFFFFFFF, ICDFROffset(3));
-	writeGICReg(0xFFFFFFFF, ICDFROffset(4));
+	writeGICReg(0x55555555, ICDFROffset(2));
+	writeGICReg(0x55555555, ICDFROffset(3));
+	writeGICReg(0x55555555, ICDFROffset(4));
 
 	// set interrupt priority - to the lowest priority and all equal
 	// set 1 to all priority levels
+#define DEFAULT_PRIORTY_VALUE 0xa0a0a0a0U
 	for(; u4Index<24; u4Index++)
 	{
-		writeGICReg(1, ICDIPROffset(u4Index));
+		writeGICReg(DEFAULT_PRIORTY_VALUE, ICDIPROffset(u4Index));
 	}
+#define DEFAULT_TARGET_CPU_0_VALUE 0x55555555
 	//set all interrupts to be targeted for CPU core 0 for this use case
 	for(u4Index = 0; u4Index<24; u4Index++)
 	{
-		writeGICReg(0x00000000, ICDIPTROffset(u4Index));
+		writeGICReg(DEFAULT_TARGET_CPU_0_VALUE, ICDIPTROffset(u4Index));
 	}
 
 	//enable interrupts, to enable write 1 to specific bit
-	DistributorEnableInterrupt(82); // use case - 82 is uart1 interrupt
+	//DistributorEnableInterrupt(82); // use case - 82 is uart1 interrupt
 
 }
 
@@ -195,11 +197,11 @@ void InitCPUInterface(void)
 	value indicated by this field, the interface signals
 	the interrupt to the processor.
 	*/
-	writeGICReg(0,ICCPMR_OFFSET);
+	writeGICReg(0xF0U,ICCPMR_OFFSET);
 	// dont need to set binary position register - use case, no preemption
 	//write to ICCICR to enable signalling of interrupt
 
-	u4TempValue = rightShift(ICCICR_EnableS);
+	u4TempValue = (rightShift(ICCICR_EnableS) | rightShift(ICCICR_EnableNS) | rightShift(ICCICR_AckCtl));
 	writeGICReg(u4TempValue,ICCICR_OFFSET);
 
 }
