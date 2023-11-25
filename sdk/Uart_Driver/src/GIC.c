@@ -7,10 +7,11 @@
 
 
 #include "GIC.h"
-/***********typedefs**************/
-typedef void (*InterruptHandlerFunc)(void);
+#include "xil_exception.h"
+
 /***********definitions**************/
 #define RegisterSize 4
+
 //macro definitions
 #define ICDFROffset(x) (ICDICFR_BASE_OFFSET + RegisterSize*x)
 #define ICDIPROffset(x) (ICDIPR_BASE_OFFSET + RegisterSize*x)
@@ -18,6 +19,7 @@ typedef void (*InterruptHandlerFunc)(void);
 #define ICDISEROffset(x) (ICDISER_BASE_OFFSET + RegisterSize*x)
 #define rightShift(x) (0x1 << x)
 #define leftShift(x) (0x1 >> x)
+
 //register offsets
 #define MPCORE_ADDRESS 0xF8F00000 		// Applciation processing unit base address
 #define ICCICR_OFFSET 0x00000100 		// CPU interface control register
@@ -40,104 +42,47 @@ typedef void (*InterruptHandlerFunc)(void);
 #define ICCICR_EnableNS 1
 #define ICCICR_EnableS 0
 
-
-
-
-
-
-//typedefs and enums
+// static function prototypes
+static void HandlerVectorInitializer(GICInstanceType* GICInstance);
+static RUINT32 readGICReg(RUINT32 offset);
+static void writeGICReg(RUINT32 data, RUINT32 offset);
+static void InitDistributor(void);
+static void DistributorEnableInterrupt(RUINT32 IntId);
+static void InitCPUInterface(void);
+static void GICInterruptHandler(void* unusedData);
+static GICResultEnum GICInstanceDefaultValueInitializer(GICInstanceType* GICInstance);
 
 //function prototypes
 
-void readGICReg(RUINT32 *dataHolder, RUINT32 offset);
-void writeGICReg(RUINT32 data, RUINT32 offset);
-void InitializeIRQ(void);
-void InitDistributor(void);
-void InitCPUInterface(void);
-void GICInterruptHandler(void);
-void setInterruptHandler(void);
-void DistributorEnableInterrupt(RUINT32 IntId);
-void enableDistributor(void);
-void ConnectInterruptHandler(RUINT32 IntId, InterruptHandlerFunc HandlerFunc);
-
-
-/*general info :
- * distributor -> sends and signals CPU regarding interrupt
- * 	-> receives the interrupt signals
- * 	-> forwarding interrupt signals to CPU GIC controller
- * 	-> enabling / disabling interrupts
- * 	-> setting priorities to interrupts
- * 	-> setting target processor of the interrupts (which interrupt signal will be feed into which CPU)
- * 	-> setting interrupt level sensitivity or edge triggered (sensitivity) option
- * CPU interface -> acks interrupts and distributor
- * 	-> enabling signalling of interrupt requests by CPU
- * 	-> acknowledging interrupts
- * 	-> indicating compilation of processing of an interrupt
- * GIC controller*/
-
-/*procedure :
- * initialize distributor
- * initalize CPU interface
- * initialize GIC instance
- * initialize and start GIC
- * initialize IRQ interrupts
- * */
-
-/*after reset or Power on, Distributor and CPU interface controller is disabled.
- * It is the responsiblity of the software to initialize*/
-
-
-
-void readGICReg(RUINT32 *dataHolder, RUINT32 offset)
+// Driver Internal Linkage Functions (Static Functions - available to only current source file - cannot be linked via linker to any other file)
+static void IdleHandler(void* Argument)
 {
-	RUINT32 fullReadAddr = MPCORE_ADDRESS + offset;
-	*dataHolder = *(RUINT32 *)fullReadAddr;
+	// place holder function
+	return;
 }
 
-void writeGICReg(RUINT32 data, RUINT32 offset)
+static RUINT32 readGICReg(RUINT32 offset)
+{
+	RUINT32 fullReadAddr = MPCORE_ADDRESS + offset;
+	return *(RUINT32 *)fullReadAddr;
+}
+
+static void writeGICReg(RUINT32 data, RUINT32 offset)
 {
 	RUINT32 fullReadAddr = MPCORE_ADDRESS + offset;
 	*(RUINT32 *)fullReadAddr = data;
 }
 
-void enableDistributor()
+static void HandlerVectorInitializer(GICInstanceType* GICInstance)
 {
-	/* Operation - 3
-	 * write to ICDDCR register to enable distributor (bit 0 shall be set to '1')
-	 * */
-	RUINT32 u4Temp = 1U;
-	writeGICReg(u4Temp, ICDDCR_OFFSET);
+	for(RUINT32 u4Index = 0; u4Index < GIC_MAX_NUMBER_OF_INTERRUPTS; u4Index++)
+	{
+		GICInstance->InterruptHandlerVector[u4Index].CallBack = IdleHandler;
+		GICInstance->InterruptHandlerVector[u4Index].CallBackArgumentSet = NULL;
+	}
 }
 
-void DistributorEnableInterrupt(RUINT32 IntId)
-{
-	const RUINT32 cu4TotalIntNum = 96U;
-	RUINT32 u4ModBase = 32U;
-	RUINT32 u4TempRegisterOffset = 0;
-	RUINT32 u4TempBitOffset = 0;
-	RUINT32 u4TempReadRegister = 0;
-	RUINT32 u4TempBitSetter = 1U;
-
-	/*each ICDISER register is of size 32 bit
-	 * ICDISER0 -> 0:31
-	 * ICDISER1 -> 32:63
-	 * ICDISER2 -> 64:95
-	 * */
-
-	u4TempBitOffset = IntId % u4ModBase;
-	u4TempRegisterOffset = IntId / u4ModBase;//((IntId - u4TempBitOffset) / u4ModBase) - 1U;
-
-	readGICReg(&u4TempReadRegister, ICDISEROffset(u4TempRegisterOffset));
-
-	u4TempBitSetter <<= u4TempBitOffset;
-
-	u4TempReadRegister |= u4TempBitSetter;
-
-	writeGICReg(u4TempReadRegister, ICDISEROffset(u4TempRegisterOffset));
-
-}
-
-void InitDistributor()
+static void InitDistributor()
 {
 	/* Operation - 1
 	 * ICD - Distributor initialization operations
@@ -181,7 +126,19 @@ void InitDistributor()
 
 }
 
-void InitCPUInterface(void)
+static GICResultEnum GICInstanceDefaultValueInitializer(GICInstanceType* GICInstance)
+{
+	if(GICInstance != NULL)
+	{
+		GICInstance->GICBaseAddr = MPCORE_ADDRESS;
+		HandlerVectorInitializer(GICInstance);
+		return GIC_SUCCESS;
+	}
+	else
+		return GIC_FAILURE;
+}
+
+static void InitCPUInterface(void)
 {
 	/* OP - 2
 	 * ICC - CPU interface initialization operations
@@ -204,4 +161,123 @@ void InitCPUInterface(void)
 	u4TempValue = (rightShift(ICCICR_EnableS) | rightShift(ICCICR_EnableNS) | rightShift(ICCICR_AckCtl));
 	writeGICReg(u4TempValue,ICCICR_OFFSET);
 
+}
+
+static void GICInterruptHandler(void* GICInstance)
+{
+	if(GICInstance != NULL)
+	{
+		RUINT32 InterruptID = 0; // will store retrieved int ID
+		GICInstanceType* GICInstacePtr = (GICInstanceType*)GICInstance;
+		const RUINT32 InterruptMask = 0x3FFU;
+		RUINT32 u4InterruptAckValue;
+
+		// read interrupt ack register
+		u4InterruptAckValue = readGICReg(ICCIAR_OFFSET);
+
+		// retrieve the requesting interrupt ID
+		InterruptID = u4InterruptAckValue & InterruptMask;
+		if(InterruptID < GIC_MAX_NUMBER_OF_INTERRUPTS)
+		{
+			CallbackFunction InterruptHandlerFunction = GICInstacePtr->InterruptHandlerVector[InterruptID].CallBack;
+			void*  InterruptHandlerFunctionArg = GICInstacePtr->InterruptHandlerVector[InterruptID].CallBackArgumentSet;
+
+			// call the interrupt request ID's handler function
+			InterruptHandlerFunction(InterruptHandlerFunctionArg);
+
+			// clear the interrupt for next interrupt request
+			writeGICReg(InterruptID, ICCEOIR_OFFSET);
+		}
+	}
+	return;
+}
+
+static void DistributorEnableInterrupt(RUINT32 IntId)
+{
+	RUINT32 u4ModBase = 32U;
+	RUINT32 u4TempRegisterOffset = 0;
+	RUINT32 u4TempBitOffset = 0;
+	RUINT32 u4TempReadRegister = 0;
+	RUINT32 u4TempBitSetter = 1U;
+
+	/*each ICDISER register is of size 32 bit
+	 * ICDISER0 -> 0:31
+	 * ICDISER1 -> 32:63
+	 * ICDISER2 -> 64:95
+	 * */
+
+	u4TempBitOffset = IntId % u4ModBase;
+	u4TempRegisterOffset = IntId / u4ModBase;//((IntId - u4TempBitOffset) / u4ModBase) - 1U;
+
+	u4TempReadRegister = readGICReg(ICDISEROffset(u4TempRegisterOffset));
+
+	u4TempBitSetter <<= u4TempBitOffset;
+
+	u4TempReadRegister |= u4TempBitSetter;
+
+	writeGICReg(u4TempReadRegister, ICDISEROffset(u4TempRegisterOffset));
+
+}
+
+////////////////////////////////////////////////////
+// Driver External Linkage Functions (API Interfaces)
+////////////////////////////////////////////////////
+
+/**
+ * Initializes GIC Instance
+ * Sets the IRQ interrupt request handler function as the GIC handler function
+ */
+GICResultEnum InitializeGIC(GICInstanceType* InstancePtr)
+{
+	GICResultEnum Status = GIC_FAILURE;
+
+	if(InstancePtr != NULL)
+	{
+		InitDistributor();
+		InitCPUInterface();
+		Status = GICInstanceDefaultValueInitializer(InstancePtr);
+
+		// connect IRQ handler function to GIC handler function
+		Xil_ExceptionRegisterHandler(5U, (Xil_ExceptionHandler)GICInterruptHandler, InstancePtr);
+	}
+
+	return Status;
+}
+
+GICResultEnum GICConnectInterruptHandler(GICInstanceType* GICInstance, RUINT32 InterruptID, void* InterruptHandlerFunction, void* InterruptHandlerFunctionArgument)
+{
+	if(GICInstance != NULL)
+	{
+		if(InterruptID < GIC_MAX_NUMBER_OF_INTERRUPTS)
+		{
+			GICInstance->InterruptHandlerVector[InterruptID].CallBack = (CallbackFunction)InterruptHandlerFunction;
+			GICInstance->InterruptHandlerVector[InterruptID].CallBackArgumentSet = InterruptHandlerFunctionArgument;
+			return GIC_SUCCESS;
+		}
+	}
+	return GIC_FAILURE;
+}
+
+/**
+ * Enables Input ID Interrupt
+ */
+GICResultEnum GICEnableInterruptID(RUINT32 u4InterruptIDToEnable)
+{
+	GICResultEnum Status = GIC_FAILURE;
+
+	if(u4InterruptIDToEnable < GIC_MAX_NUMBER_OF_INTERRUPTS)
+	{
+		DistributorEnableInterrupt(u4InterruptIDToEnable);
+	}
+
+	return Status;
+
+}
+
+void StartGIC(void)
+{
+	// enables distributor
+	writeGICReg(1U, ICDDCR_OFFSET);
+	// enables exceptions to fire up (such as IRQ)
+	Xil_ExceptionEnable();
 }

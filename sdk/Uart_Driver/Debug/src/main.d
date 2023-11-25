@@ -15,7 +15,8 @@ src/main.o src/main.o: ../src/main.c ../src/platform.h \
  ../../BaseProject_bsp/ps7_cortexa9_0/include/xil_assert.h \
  ../../BaseProject_bsp/ps7_cortexa9_0/include/xil_io.h \
  ../../BaseProject_bsp/ps7_cortexa9_0/include/xscugic_hw.h \
- ../../BaseProject_bsp/ps7_cortexa9_0/include/xil_exception.h
+ ../../BaseProject_bsp/ps7_cortexa9_0/include/xil_exception.h \
+ ../src/GIC.h
 
 ../src/platform.h:
 
@@ -56,3 +57,5 @@ src/main.o src/main.o: ../src/main.c ../src/platform.h \
 ../../BaseProject_bsp/ps7_cortexa9_0/include/xscugic_hw.h:
 
 ../../BaseProject_bsp/ps7_cortexa9_0/include/xil_exception.h:
+
+../src/GIC.h:

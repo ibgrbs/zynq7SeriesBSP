@@ -24,4 +24,6 @@ typedef enum {
 	XST_FAILURE
 } ReturnType;
 
+#define NULL		0U
+
 #endif /* SRC_COMMONTYPES_H_ */

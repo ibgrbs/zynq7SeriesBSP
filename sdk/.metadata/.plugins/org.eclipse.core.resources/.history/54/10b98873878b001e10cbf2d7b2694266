@@ -1,0 +1,34 @@
+/*
+ * GIC.h
+ *
+ *  Created on: Nov 13, 2022
+ *      Author: bugra's PC
+ */
+
+#ifndef SRC_GIC_H_
+#define SRC_GIC_H_
+
+#include "CommonTypes.h"
+
+#define GIC_MAX_NUMBER_OF_INTERRUPTS 96
+
+typedef void (*CallbackFunction)(void);
+
+typedef struct {
+	CallbackFunction Callback;
+}InterruptHandler;
+
+typedef struct {
+	InterruptHandler[GIC_MAX_NUMBER_OF_INTERRUPTS];
+}InterruptHandlerVectorType;
+
+
+typedef struct {
+	RUINT32 InstanceID;
+	RUINT32 IsInitialized;
+	InterruptHandlerVectorType InterruptFunctionHandlerVector;
+
+}GICInstanceType;
+
+
+#endif /* SRC_GIC_H_ */

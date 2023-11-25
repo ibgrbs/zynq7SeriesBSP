@@ -1,0 +1,31 @@
+/*
+ * GIC.h
+ *
+ *  Created on: Nov 13, 2022
+ *      Author: bugra's PC
+ */
+
+#ifndef SRC_GIC_H_
+#define SRC_GIC_H_
+
+#include "CommonTypes.h"
+
+typedef void (*HandlerFunction)(void);
+
+typedef struct {
+
+}InterruptHandler;
+typedef struct {
+	RUINT32 a;
+}InterruptHandlerVectorType;
+
+
+typedef struct {
+	RUINT32 InstanceID;
+	RUINT32 IsInitialized;
+	InterruptHandlerVectorType InterruptFunctionHandlerVector;
+
+}GICInstanceType;
+
+
+#endif /* SRC_GIC_H_ */

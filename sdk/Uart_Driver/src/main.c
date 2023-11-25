@@ -51,72 +51,7 @@
 #include "xil_io.h"
 #include "xil_printf.h"
 #include "xscugic.h"
-
-void setupGIC(XScuGic* InstancePtr, void* intDevicePtr);
-
-
-void setupGIC(XScuGic* InstancePtr, void* intDevicePtr){
-	RINT32 Status = 0;
-
-    //setup interrupt system
-	XScuGic_Config *IntcConfig; /* Config for interrupt controller */
-
-	/* Initialize the interrupt controller driver */
-//	IntcConfig = XScuGic_LookupConfig(0);
-//
-//	Status = XScuGic_CfgInitialize(InstancePtr, IntcConfig, IntcConfig->CpuBaseAddress);
-//
-//	/*
-//	 * Initialize the exception table.
-//	 */
-//	Xil_ExceptionInit();
-//
-//	/*
-//	 * Connect the interrupt controller interrupt handler to the
-//	 * hardware interrupt handling logic in the processor.
-//	 */
-//	Xil_ExceptionRegisterHandler(5U,
-//				(Xil_ExceptionHandler) XScuGic_InterruptHandler,
-//				InstancePtr);
-//
-//	/*
-//	 * Connect a device driver handler that will be called when an
-//	 * interrupt for the device occurs, the device driver handler
-//	 * performs the specific interrupt processing for the device
-//	 */
-//	Status = XScuGic_Connect(InstancePtr, 82,
-//				  (Xil_ExceptionHandler) xUartPsInterruptHandler,
-//				  intDevicePtr);
-//
-//
-//	/* Enable the interrupt for the device */
-//	XScuGic_Enable(InstancePtr, 82);
-//
-//
-//	/* Enable interrupts */
-//	 Xil_ExceptionEnable();
-
-	/*My GIC driver trial*/
-
-	InitDistributor();
-	InitCPUInterface();
-
-
-	/*
-	 * Connect the interrupt controller interrupt handler to the
-	 * hardware interrupt handling logic in the processor.
-	 */
-	Xil_ExceptionRegisterHandler(5U,
-				(Xil_ExceptionHandler) XScuGic_InterruptHandler,
-				InstancePtr);
-
-	DistributorEnableInterrupt(82);
-
-	enableDistributor();
-
-	Xil_ExceptionEnable();
-
-}
+#include "GIC.h"
 
 extern RUINT8 a1UartRxArray;
 extern RUINT32 u4ReceivedDataSize;
@@ -131,7 +66,7 @@ int main()
 
     uartCfgType cfgInstance0;
     uartCfgType cfgInstance1;
-    XScuGic InterruptController;	/* Instance of the Interrupt Controller */
+    GICInstanceType InterruptController;	/* Instance of the Interrupt Controller */
 
     cfgInstance0.DeviceNum = UART_INSTANCE_DEVICE_1;
     cfgInstance1.DeviceNum = UART_INSTANCE_DEVICE_0;
@@ -139,7 +74,12 @@ int main()
     initializeUartCfg (&cfgInstance0);
     InitializeUart(&cfgInstance0);
 
-    setupGIC(&InterruptController, &cfgInstance0);
+    //setupGIC(&InterruptController, &cfgInstance0);
+
+    (void)InitializeGIC(&InterruptController);
+    (void)GICEnableInterruptID(82);
+    GICConnectInterruptHandler(&InterruptController, 82, xUartPsInterruptHandler, &cfgInstance0);
+    StartGIC();
 
     RUINT8 trialArray[] = "hello from my driver \r\n";
     RUINT8 trialArray2[] = "this message is the received \r\n";
